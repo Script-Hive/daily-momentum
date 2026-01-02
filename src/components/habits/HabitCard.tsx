@@ -21,7 +21,7 @@ interface HabitCardProps {
 }
 
 export function HabitCard({ habit, stats, onToggle, onRemove, currentMonth }: HabitCardProps) {
-  const categoryConfig = CATEGORY_CONFIG[habit.category];
+  const categoryConfig = CATEGORY_CONFIG[habit.category] || CATEGORY_CONFIG.custom;
   
   // Get days for the current month
   const monthStart = startOfMonth(currentMonth);
