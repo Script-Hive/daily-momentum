@@ -20,6 +20,7 @@ const ICONS = [
   'UtensilsCrossed', 'Droplets', 'Ban', 'Calculator', 'Apple',
   'Sparkles', 'Heart', 'Moon', 'Sun', 'MessageCircle',
   'Coffee', 'Music', 'Camera', 'Star', 'Target',
+  'Sunrise', 'Shield', 'Wine', 'Wallet', 'Receipt',
 ];
 
 interface AddHabitDialogProps {
@@ -101,7 +102,7 @@ export function AddHabitDialog({ onAddHabit, existingHabits }: AddHabitDialogPro
               </Button>
 
               {/* Template Categories */}
-              {(['growth', 'fitness', 'nutrition', 'wellness'] as HabitCategory[]).map(cat => {
+              {(['growth', 'fitness', 'nutrition', 'wellness', 'discipline', 'finance'] as HabitCategory[]).map(cat => {
                 const categoryTemplates = availableTemplates.filter(t => t.category === cat);
                 if (categoryTemplates.length === 0) return null;
 
@@ -114,7 +115,9 @@ export function AddHabitDialog({ onAddHabit, existingHabits }: AddHabitDialogPro
                           cat === 'growth' && "bg-category-growth",
                           cat === 'fitness' && "bg-category-fitness",
                           cat === 'nutrition' && "bg-category-nutrition",
-                          cat === 'wellness' && "bg-category-wellness"
+                          cat === 'wellness' && "bg-category-wellness",
+                          cat === 'discipline' && "bg-category-discipline",
+                          cat === 'finance' && "bg-category-finance"
                         )}
                       />
                       {CATEGORY_CONFIG[cat].label}
@@ -134,7 +137,9 @@ export function AddHabitDialog({ onAddHabit, existingHabits }: AddHabitDialogPro
                               cat === 'growth' && "bg-category-growth/15 text-category-growth",
                               cat === 'fitness' && "bg-category-fitness/15 text-category-fitness",
                               cat === 'nutrition' && "bg-category-nutrition/15 text-category-nutrition",
-                              cat === 'wellness' && "bg-category-wellness/15 text-category-wellness"
+                              cat === 'wellness' && "bg-category-wellness/15 text-category-wellness",
+                              cat === 'discipline' && "bg-category-discipline/15 text-category-discipline",
+                              cat === 'finance' && "bg-category-finance/15 text-category-finance"
                             )}
                           >
                             <HabitIcon name={template.icon} className="w-4 h-4" />
@@ -187,7 +192,7 @@ export function AddHabitDialog({ onAddHabit, existingHabits }: AddHabitDialogPro
               <div className="space-y-2">
                 <label className="text-sm font-medium">Category</label>
                 <div className="grid grid-cols-2 gap-2">
-                  {(['growth', 'fitness', 'nutrition', 'wellness', 'custom'] as HabitCategory[]).map(cat => (
+                  {(['growth', 'fitness', 'nutrition', 'wellness', 'discipline', 'finance', 'custom'] as HabitCategory[]).map(cat => (
                     <button
                       key={cat}
                       onClick={() => setCategory(cat)}
@@ -205,6 +210,8 @@ export function AddHabitDialog({ onAddHabit, existingHabits }: AddHabitDialogPro
                           cat === 'fitness' && "bg-category-fitness",
                           cat === 'nutrition' && "bg-category-nutrition",
                           cat === 'wellness' && "bg-category-wellness",
+                          cat === 'discipline' && "bg-category-discipline",
+                          cat === 'finance' && "bg-category-finance",
                           cat === 'custom' && "bg-primary"
                         )}
                       />
