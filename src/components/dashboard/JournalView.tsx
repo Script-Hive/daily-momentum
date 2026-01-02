@@ -196,7 +196,6 @@ export function JournalView() {
                   {showMoodInsights ? 'Hide Insights' : 'Mood Insights'}
                 </Button>
               )}
-              </Button>
             </div>
 
             {/* Today's Entry Preview */}

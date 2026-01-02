@@ -14,10 +14,6 @@ interface JournalCalendarProps {
   onMonthChange: (month: Date) => void;
   onDateSelect: (date: string) => void;
 }
-  selectedDate: string | null;
-  onMonthChange: (month: Date) => void;
-  onDateSelect: (date: string) => void;
-}
 
 export function JournalCalendar({
   monthEntries,
