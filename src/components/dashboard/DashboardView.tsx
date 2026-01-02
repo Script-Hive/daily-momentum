@@ -56,6 +56,8 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
       fitness: { total: 0, completed: 0 },
       nutrition: { total: 0, completed: 0 },
       wellness: { total: 0, completed: 0 },
+      discipline: { total: 0, completed: 0 },
+      finance: { total: 0, completed: 0 },
       custom: { total: 0, completed: 0 },
     };
 

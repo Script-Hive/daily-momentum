@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { BookOpen, Dumbbell, Apple, Sparkles, Plus, Check } from 'lucide-react';
+import { BookOpen, Dumbbell, Apple, Sparkles, Plus, Check, Shield, Wallet } from 'lucide-react';
 import { useHabits } from '@/hooks/useHabits';
 import { DEFAULT_HABITS, HabitCategory, CATEGORY_CONFIG } from '@/types/habit';
 import { HabitIcon } from '@/components/ui/HabitIcon';
@@ -11,6 +11,8 @@ const categoryIcons: Record<HabitCategory, React.ElementType> = {
   fitness: Dumbbell,
   nutrition: Apple,
   wellness: Sparkles,
+  discipline: Shield,
+  finance: Wallet,
   custom: Plus,
 };
 
@@ -19,6 +21,8 @@ const categoryDescriptions: Record<HabitCategory, string> = {
   fitness: 'Build strength, endurance, and healthy movement patterns.',
   nutrition: 'Fuel your body with nourishing foods and hydration.',
   wellness: 'Cultivate inner peace and emotional well-being.',
+  discipline: 'Build self-control and break unwanted patterns.',
+  finance: 'Track spending and build financial awareness.',
   custom: 'Create your own habits tailored to your goals.',
 };
 
