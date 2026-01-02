@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Sun, Moon, Leaf, Bell, Eye, EyeOff, Mail, Lock, LogOut } from 'lucide-react';
+import { Sun, Moon, Leaf, Bell, Eye, EyeOff, Mail, Lock, LogOut, Cloud } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -15,22 +15,55 @@ interface PreferencesCardProps {
 
 export function PreferencesCard({ preferences, onUpdatePreferences, onLogout }: PreferencesCardProps) {
   const appearanceModes = [
-    { id: 'light' as const, icon: Sun, label: 'Light' },
-    { id: 'dark' as const, icon: Moon, label: 'Dark' },
-    { id: 'calm' as const, icon: Leaf, label: 'Calm' },
+    { 
+      id: 'light' as const, 
+      icon: Sun, 
+      label: 'Light',
+      description: 'Bright and clear',
+      preview: {
+        bg: 'bg-white',
+        accent: 'bg-primary/20',
+        text: 'bg-foreground/60'
+      }
+    },
+    { 
+      id: 'dark' as const, 
+      icon: Moon, 
+      label: 'Dark',
+      description: 'Easy on the eyes',
+      preview: {
+        bg: 'bg-slate-900',
+        accent: 'bg-emerald-500/30',
+        text: 'bg-slate-400'
+      }
+    },
+    { 
+      id: 'calm' as const, 
+      icon: Cloud, 
+      label: 'Calm',
+      description: 'Soothing & mindful',
+      preview: {
+        bg: 'bg-gradient-to-br from-[hsl(270,50%,92%)] via-[hsl(200,40%,93%)] to-[hsl(140,30%,92%)]',
+        accent: 'bg-[hsl(270,45%,75%)]/40',
+        text: 'bg-[hsl(220,20%,50%)]'
+      }
+    },
   ];
 
   const handleAppearanceChange = (mode: 'light' | 'dark' | 'calm') => {
     onUpdatePreferences({ appearance: mode });
     
+    // Remove all theme classes first
+    document.documentElement.classList.remove('dark', 'calm');
+    
     // Apply theme
     if (mode === 'dark') {
       document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', mode);
+    } else if (mode === 'calm') {
+      document.documentElement.classList.add('calm');
     }
+    
+    localStorage.setItem('theme', mode);
   };
 
   return (
@@ -47,30 +80,80 @@ export function PreferencesCard({ preferences, onUpdatePreferences, onLogout }: 
           {/* Appearance */}
           <div>
             <p className="text-sm text-muted-foreground mb-3">Appearance</p>
-            <div className="flex gap-2">
+            <div className="grid grid-cols-3 gap-3">
               {appearanceModes.map((mode) => (
-                <Button
+                <motion.button
                   key={mode.id}
-                  variant="outline"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   className={cn(
-                    "flex-1 flex flex-col items-center gap-2 py-4 h-auto border-border/50 transition-all",
-                    preferences.appearance === mode.id && "border-primary bg-primary/5"
+                    "relative flex flex-col items-center gap-2 p-3 rounded-xl border transition-all duration-300",
+                    preferences.appearance === mode.id 
+                      ? "border-primary bg-primary/5 shadow-sm" 
+                      : "border-border/50 hover:border-border hover:bg-muted/30"
                   )}
                   onClick={() => handleAppearanceChange(mode.id)}
                 >
-                  <mode.icon className={cn(
-                    "h-5 w-5",
-                    preferences.appearance === mode.id ? "text-primary" : "text-muted-foreground"
-                  )} />
-                  <span className={cn(
-                    "text-xs",
-                    preferences.appearance === mode.id ? "text-foreground font-medium" : "text-muted-foreground"
+                  {/* Preview Card */}
+                  <div className={cn(
+                    "w-full h-14 rounded-lg overflow-hidden p-2 flex flex-col gap-1",
+                    mode.preview.bg
                   )}>
-                    {mode.label}
+                    <div className={cn("w-6 h-1.5 rounded-full", mode.preview.accent)} />
+                    <div className={cn("w-10 h-1 rounded-full opacity-40", mode.preview.text)} />
+                    <div className={cn("w-8 h-1 rounded-full opacity-30", mode.preview.text)} />
+                  </div>
+                  
+                  {/* Icon and Label */}
+                  <div className="flex items-center gap-1.5">
+                    <mode.icon className={cn(
+                      "h-3.5 w-3.5",
+                      preferences.appearance === mode.id ? "text-primary" : "text-muted-foreground"
+                    )} />
+                    <span className={cn(
+                      "text-xs font-medium",
+                      preferences.appearance === mode.id ? "text-foreground" : "text-muted-foreground"
+                    )}>
+                      {mode.label}
+                    </span>
+                  </div>
+                  
+                  {/* Description */}
+                  <span className="text-[10px] text-muted-foreground leading-tight text-center">
+                    {mode.description}
                   </span>
-                </Button>
+
+                  {/* Selected indicator */}
+                  {preferences.appearance === mode.id && (
+                    <motion.div
+                      layoutId="appearance-indicator"
+                      className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-primary flex items-center justify-center"
+                      initial={false}
+                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                    >
+                      <Leaf className="w-2.5 h-2.5 text-primary-foreground" />
+                    </motion.div>
+                  )}
+                </motion.button>
               ))}
             </div>
+
+            {/* Calm Mode Special Note */}
+            {preferences.appearance === 'calm' && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mt-3 p-3 rounded-lg bg-calm-lavender/20 border border-calm-lavender/30"
+              >
+                <div className="flex items-start gap-2">
+                  <Cloud className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                  <p className="text-xs text-foreground/80 leading-relaxed">
+                    A soothing, mindful theme designed to reduce stress. Enjoy soft pastels, gentle gradients, and peaceful colors.
+                  </p>
+                </div>
+              </motion.div>
+            )}
           </div>
 
           <Separator className="bg-border/50" />
