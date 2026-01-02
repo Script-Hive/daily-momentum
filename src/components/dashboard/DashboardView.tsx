@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format, startOfMonth, endOfMonth, addMonths, subMonths } from 'date-fns';
-import { ChevronLeft, ChevronRight, Flame, TrendingUp, Award, Target } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Flame, TrendingUp, Award, Target, PenTool } from 'lucide-react';
 import { useHabits } from '@/hooks/useHabits';
+import { useJournal } from '@/hooks/useJournal';
 import { HabitCard } from '@/components/habits/HabitCard';
 import { AddHabitDialog } from '@/components/habits/AddHabitDialog';
 import { ProgressRing } from '@/components/habits/ProgressRing';
@@ -10,7 +11,11 @@ import { CATEGORY_CONFIG, HabitCategory } from '@/types/habit';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-export function DashboardView() {
+interface DashboardViewProps {
+  onNavigateToJournal?: () => void;
+}
+
+export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
   const { 
     habits, 
     isLoaded, 
@@ -70,6 +75,9 @@ export function DashboardView() {
     );
   }
 
+  const { getTodayEntry } = useJournal();
+  const todayJournalEntry = getTodayEntry();
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -82,7 +90,19 @@ export function DashboardView() {
             {format(new Date(), 'EEEE, MMMM d, yyyy')}
           </p>
         </div>
-        <AddHabitDialog onAddHabit={addHabit} existingHabits={habits} />
+        <div className="flex items-center gap-2">
+          {onNavigateToJournal && (
+            <Button 
+              variant="outline" 
+              onClick={onNavigateToJournal}
+              className="gap-2"
+            >
+              <PenTool className="w-4 h-4" />
+              {todayJournalEntry ? 'Continue Journal' : "Write Today's Entry"}
+            </Button>
+          )}
+          <AddHabitDialog onAddHabit={addHabit} existingHabits={habits} />
+        </div>
       </div>
 
       {/* Stats Cards */}

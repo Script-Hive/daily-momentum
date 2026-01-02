@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Navigation, Tab } from '@/components/layout/Navigation';
 import { DashboardView } from '@/components/dashboard/DashboardView';
 import { DevelopmentView } from '@/components/dashboard/DevelopmentView';
+import { JournalView } from '@/components/dashboard/JournalView';
 import { AnalyticsView } from '@/components/dashboard/AnalyticsView';
 import { GoalsView } from '@/components/dashboard/GoalsView';
 import { SettingsView } from '@/components/dashboard/SettingsView';
@@ -21,9 +22,11 @@ const Index = () => {
   const renderView = () => {
     switch (activeTab) {
       case 'dashboard':
-        return <DashboardView />;
+        return <DashboardView onNavigateToJournal={() => setActiveTab('journal')} />;
       case 'development':
         return <DevelopmentView />;
+      case 'journal':
+        return <JournalView />;
       case 'analytics':
         return <AnalyticsView />;
       case 'goals':
@@ -31,7 +34,7 @@ const Index = () => {
       case 'settings':
         return <SettingsView />;
       default:
-        return <DashboardView />;
+        return <DashboardView onNavigateToJournal={() => setActiveTab('journal')} />;
     }
   };
 
