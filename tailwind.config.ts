@@ -66,10 +66,10 @@ export default {
         },
         achievement: "hsl(var(--achievement))",
         category: {
-          growth: "hsl(var(--category-growth))",
-          fitness: "hsl(var(--category-fitness))",
-          nutrition: "hsl(var(--category-nutrition))",
-          wellness: "hsl(var(--category-wellness))",
+          health: "hsl(var(--category-health))",
+          career: "hsl(var(--category-career))",
+          mind: "hsl(var(--category-mind))",
+          relationships: "hsl(var(--category-relationships))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",

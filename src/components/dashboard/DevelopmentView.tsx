@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { BookOpen, Dumbbell, Apple, Sparkles, Plus, Check, Shield, Wallet } from 'lucide-react';
+import { Heart, Briefcase, Brain, Users, Plus, Check } from 'lucide-react';
 import { useHabits } from '@/hooks/useHabits';
 import { DEFAULT_HABITS, HabitCategory, CATEGORY_CONFIG } from '@/types/habit';
 import { HabitIcon } from '@/components/ui/HabitIcon';
@@ -7,29 +7,25 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 const categoryIcons: Record<HabitCategory, React.ElementType> = {
-  growth: BookOpen,
-  fitness: Dumbbell,
-  nutrition: Apple,
-  wellness: Sparkles,
-  discipline: Shield,
-  finance: Wallet,
+  health: Heart,
+  career: Briefcase,
+  mind: Brain,
+  relationships: Users,
   custom: Plus,
 };
 
 const categoryDescriptions: Record<HabitCategory, string> = {
-  growth: 'Expand your mind and develop new skills every day.',
-  fitness: 'Build strength, endurance, and healthy movement patterns.',
-  nutrition: 'Fuel your body with nourishing foods and hydration.',
-  wellness: 'Cultivate inner peace and emotional well-being.',
-  discipline: 'Build self-control and break unwanted patterns.',
-  finance: 'Track spending and build financial awareness.',
+  health: 'Build physical wellness through movement, nutrition, and rest.',
+  career: 'Develop professional skills and advance your career goals.',
+  mind: 'Cultivate inner peace, learning, and mental well-being.',
+  relationships: 'Strengthen bonds with family, friends, and loved ones.',
   custom: 'Create your own habits tailored to your goals.',
 };
 
+const LIFE_BALANCE_CATEGORIES: HabitCategory[] = ['health', 'career', 'mind', 'relationships'];
+
 export function DevelopmentView() {
   const { habits, addHabit } = useHabits();
-
-  const categories: HabitCategory[] = ['growth', 'fitness', 'nutrition', 'wellness'];
 
   const isHabitAdded = (habitName: string) => {
     return habits.some(h => h.name === habitName);
@@ -47,13 +43,13 @@ export function DevelopmentView() {
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Personal Development</h1>
         <p className="text-muted-foreground mt-1">
-          Pre-built habit templates to kickstart your growth journey
+          Pre-built habit templates aligned with your Life Balance wheel
         </p>
       </div>
 
       {/* Category Sections */}
       <div className="space-y-8">
-        {categories.map((category, categoryIndex) => {
+        {LIFE_BALANCE_CATEGORIES.map((category, categoryIndex) => {
           const CategoryIcon = categoryIcons[category];
           const templates = DEFAULT_HABITS.filter(h => h.category === category);
 
@@ -70,10 +66,10 @@ export function DevelopmentView() {
                 <div 
                   className={cn(
                     "flex items-center justify-center w-12 h-12 rounded-xl",
-                    category === 'growth' && "bg-category-growth/15 text-category-growth",
-                    category === 'fitness' && "bg-category-fitness/15 text-category-fitness",
-                    category === 'nutrition' && "bg-category-nutrition/15 text-category-nutrition",
-                    category === 'wellness' && "bg-category-wellness/15 text-category-wellness"
+                    category === 'health' && "bg-category-health/15 text-category-health",
+                    category === 'career' && "bg-category-career/15 text-category-career",
+                    category === 'mind' && "bg-category-mind/15 text-category-mind",
+                    category === 'relationships' && "bg-category-relationships/15 text-category-relationships"
                   )}
                 >
                   <CategoryIcon className="w-6 h-6" />
@@ -106,10 +102,10 @@ export function DevelopmentView() {
                         <div 
                           className={cn(
                             "flex items-center justify-center w-10 h-10 rounded-lg shrink-0",
-                            category === 'growth' && "bg-category-growth/15 text-category-growth",
-                            category === 'fitness' && "bg-category-fitness/15 text-category-fitness",
-                            category === 'nutrition' && "bg-category-nutrition/15 text-category-nutrition",
-                            category === 'wellness' && "bg-category-wellness/15 text-category-wellness"
+                            category === 'health' && "bg-category-health/15 text-category-health",
+                            category === 'career' && "bg-category-career/15 text-category-career",
+                            category === 'mind' && "bg-category-mind/15 text-category-mind",
+                            category === 'relationships' && "bg-category-relationships/15 text-category-relationships"
                           )}
                         >
                           <HabitIcon name={template.icon} className="w-5 h-5" />

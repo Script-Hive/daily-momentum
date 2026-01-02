@@ -1,4 +1,6 @@
-export type HabitCategory = 'growth' | 'fitness' | 'nutrition' | 'wellness' | 'discipline' | 'finance' | 'custom';
+export type HabitCategory = 'health' | 'career' | 'mind' | 'relationships' | 'custom';
+
+export type LifeArea = 'health' | 'career' | 'mind' | 'relationships';
 
 export interface Habit {
   id: string;
@@ -9,7 +11,7 @@ export interface Habit {
   completedDates: string[]; // ISO date strings
   createdAt: string;
   order: number;
-  lifeArea?: 'health' | 'career' | 'mind' | 'relationships';
+  lifeArea?: LifeArea;
 }
 
 export interface HabitStats {
@@ -27,7 +29,7 @@ export interface Goal {
   progress: number;
   isCompleted: boolean;
   createdAt: string;
-  lifeArea?: 'health' | 'career' | 'mind' | 'relationships';
+  lifeArea?: LifeArea;
 }
 
 export interface DailyProgress {
@@ -38,51 +40,39 @@ export interface DailyProgress {
 }
 
 export const CATEGORY_CONFIG: Record<HabitCategory, { label: string; color: string; bgClass: string }> = {
-  growth: { label: 'Personal Growth', color: 'category-growth', bgClass: 'bg-category-growth' },
-  fitness: { label: 'Health & Fitness', color: 'category-fitness', bgClass: 'bg-category-fitness' },
-  nutrition: { label: 'Nutrition', color: 'category-nutrition', bgClass: 'bg-category-nutrition' },
-  wellness: { label: 'Mental Wellness', color: 'category-wellness', bgClass: 'bg-category-wellness' },
-  discipline: { label: 'Discipline', color: 'category-discipline', bgClass: 'bg-category-discipline' },
-  finance: { label: 'Finance', color: 'category-finance', bgClass: 'bg-category-finance' },
+  health: { label: 'Health', color: 'category-health', bgClass: 'bg-category-health' },
+  career: { label: 'Career', color: 'category-career', bgClass: 'bg-category-career' },
+  mind: { label: 'Mind', color: 'category-mind', bgClass: 'bg-category-mind' },
+  relationships: { label: 'Relationships', color: 'category-relationships', bgClass: 'bg-category-relationships' },
   custom: { label: 'Custom', color: 'primary', bgClass: 'bg-primary' },
 };
 
 export const DEFAULT_HABITS: Omit<Habit, 'id' | 'completedDates' | 'createdAt' | 'order'>[] = [
-  // Personal Growth
-  { name: 'Read for 20 minutes', icon: 'BookOpen', category: 'growth', color: 'category-growth', lifeArea: 'mind' },
-  { name: 'Journal for 5 minutes', icon: 'PenTool', category: 'growth', color: 'category-growth', lifeArea: 'mind' },
-  { name: 'Practice a new language', icon: 'Globe', category: 'growth', color: 'category-growth', lifeArea: 'mind' },
-  { name: 'Limit social media', icon: 'Smartphone', category: 'growth', color: 'category-growth', lifeArea: 'mind' },
-  { name: 'Learn a new skill', icon: 'Brain', category: 'growth', color: 'category-growth', lifeArea: 'career' },
-  
-  // Health & Fitness
-  { name: 'Exercise', icon: 'Dumbbell', category: 'fitness', color: 'category-fitness', lifeArea: 'health' },
-  { name: 'Stretch for 10 minutes', icon: 'Activity', category: 'fitness', color: 'category-fitness', lifeArea: 'health' },
-  { name: 'Track workouts', icon: 'ClipboardList', category: 'fitness', color: 'category-fitness', lifeArea: 'health' },
-  { name: 'Take supplements', icon: 'Pill', category: 'fitness', color: 'category-fitness', lifeArea: 'health' },
-  { name: 'Hit daily step goal', icon: 'Footprints', category: 'fitness', color: 'category-fitness', lifeArea: 'health' },
-  
-  // Nutrition
-  { name: 'Eat 3 healthy meals', icon: 'UtensilsCrossed', category: 'nutrition', color: 'category-nutrition', lifeArea: 'health' },
-  { name: 'Drink 8+ glasses of water', icon: 'Droplets', category: 'nutrition', color: 'category-nutrition', lifeArea: 'health' },
-  { name: 'Avoid junk food', icon: 'Ban', category: 'nutrition', color: 'category-nutrition', lifeArea: 'health' },
-  { name: 'Track calories', icon: 'Calculator', category: 'nutrition', color: 'category-nutrition', lifeArea: 'health' },
-  { name: 'Eat fruits & vegetables', icon: 'Apple', category: 'nutrition', color: 'category-nutrition', lifeArea: 'health' },
-  
-  // Mental Wellness
-  { name: 'Meditate for 10 minutes', icon: 'Sparkles', category: 'wellness', color: 'category-wellness', lifeArea: 'mind' },
-  { name: 'Write 3 gratitudes', icon: 'Heart', category: 'wellness', color: 'category-wellness', lifeArea: 'mind' },
-  { name: 'No phone after 9 PM', icon: 'Moon', category: 'wellness', color: 'category-wellness', lifeArea: 'health' },
-  { name: 'Spend time outside', icon: 'Sun', category: 'wellness', color: 'category-wellness', lifeArea: 'health' },
-  { name: 'Reflect on feelings', icon: 'MessageCircle', category: 'wellness', color: 'category-wellness', lifeArea: 'mind' },
+  // Health
+  { name: 'Drink water daily', icon: 'Droplets', category: 'health', color: 'category-health', lifeArea: 'health' },
+  { name: 'Daily movement / walk', icon: 'Footprints', category: 'health', color: 'category-health', lifeArea: 'health' },
+  { name: 'Sleep routine', icon: 'Moon', category: 'health', color: 'category-health', lifeArea: 'health' },
+  { name: 'Eat mindfully', icon: 'UtensilsCrossed', category: 'health', color: 'category-health', lifeArea: 'health' },
+  { name: 'Stretch / light exercise', icon: 'Activity', category: 'health', color: 'category-health', lifeArea: 'health' },
 
-  // Discipline
-  { name: '5:30 AM Wake Up', icon: 'Sunrise', category: 'discipline', color: 'category-discipline', lifeArea: 'health' },
-  { name: 'Stop Smoking', icon: 'Ban', category: 'discipline', color: 'category-discipline', lifeArea: 'health' },
-  { name: 'No Porn', icon: 'Shield', category: 'discipline', color: 'category-discipline', lifeArea: 'mind' },
-  { name: 'No Alcohol', icon: 'Wine', category: 'discipline', color: 'category-discipline', lifeArea: 'health' },
+  // Career
+  { name: 'Learn a new skill daily', icon: 'Brain', category: 'career', color: 'category-career', lifeArea: 'career' },
+  { name: 'Work focus session', icon: 'Target', category: 'career', color: 'category-career', lifeArea: 'career' },
+  { name: 'Daily planning', icon: 'ClipboardList', category: 'career', color: 'category-career', lifeArea: 'career' },
+  { name: 'Portfolio / resume progress', icon: 'Briefcase', category: 'career', color: 'category-career', lifeArea: 'career' },
+  { name: 'Networking / career growth', icon: 'Users', category: 'career', color: 'category-career', lifeArea: 'career' },
 
-  // Finance
-  { name: 'Stayed Within Budget', icon: 'Wallet', category: 'finance', color: 'category-finance', lifeArea: 'career' },
-  { name: 'Tracked Expenses', icon: 'Receipt', category: 'finance', color: 'category-finance', lifeArea: 'career' },
+  // Mind
+  { name: 'Meditation / mindfulness', icon: 'Sparkles', category: 'mind', color: 'category-mind', lifeArea: 'mind' },
+  { name: 'Journal reflection', icon: 'PenTool', category: 'mind', color: 'category-mind', lifeArea: 'mind' },
+  { name: 'Screen detox time', icon: 'Smartphone', category: 'mind', color: 'category-mind', lifeArea: 'mind' },
+  { name: 'Gratitude practice', icon: 'Heart', category: 'mind', color: 'category-mind', lifeArea: 'mind' },
+  { name: 'Reading / learning time', icon: 'BookOpen', category: 'mind', color: 'category-mind', lifeArea: 'mind' },
+
+  // Relationships
+  { name: 'Check-in with a loved one', icon: 'Phone', category: 'relationships', color: 'category-relationships', lifeArea: 'relationships' },
+  { name: 'Quality time', icon: 'Clock', category: 'relationships', color: 'category-relationships', lifeArea: 'relationships' },
+  { name: 'Express gratitude to someone', icon: 'MessageCircle', category: 'relationships', color: 'category-relationships', lifeArea: 'relationships' },
+  { name: 'Listen deeply', icon: 'Ear', category: 'relationships', color: 'category-relationships', lifeArea: 'relationships' },
+  { name: 'Strengthen connections', icon: 'Users', category: 'relationships', color: 'category-relationships', lifeArea: 'relationships' },
 ];

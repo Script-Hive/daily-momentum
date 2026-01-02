@@ -20,6 +20,8 @@ import {
   CartesianGrid,
 } from 'recharts';
 
+const LIFE_BALANCE_CATEGORIES: HabitCategory[] = ['health', 'career', 'mind', 'relationships'];
+
 export function AnalyticsView() {
   const { habits, getHabitStats, getDailyProgress, getMonthlyProgress, getBestHabit, getWeakestHabit } = useHabits();
   const [selectedMonth, setSelectedMonth] = useState(new Date());
@@ -55,12 +57,10 @@ export function AnalyticsView() {
   // Category breakdown
   const categoryBreakdown = useMemo(() => {
     const breakdown: Record<HabitCategory, { count: number; avgCompletion: number }> = {
-      growth: { count: 0, avgCompletion: 0 },
-      fitness: { count: 0, avgCompletion: 0 },
-      nutrition: { count: 0, avgCompletion: 0 },
-      wellness: { count: 0, avgCompletion: 0 },
-      discipline: { count: 0, avgCompletion: 0 },
-      finance: { count: 0, avgCompletion: 0 },
+      health: { count: 0, avgCompletion: 0 },
+      career: { count: 0, avgCompletion: 0 },
+      mind: { count: 0, avgCompletion: 0 },
+      relationships: { count: 0, avgCompletion: 0 },
       custom: { count: 0, avgCompletion: 0 },
     };
 
@@ -306,9 +306,9 @@ export function AnalyticsView() {
           transition={{ delay: 0.6 }}
           className="bg-card rounded-2xl p-5 shadow-md border border-border/50"
         >
-          <h3 className="text-lg font-semibold mb-4">Category Performance</h3>
+          <h3 className="text-lg font-semibold mb-4">Life Balance Performance</h3>
           <div className="space-y-4">
-            {(['growth', 'fitness', 'nutrition', 'wellness'] as HabitCategory[]).map(category => {
+            {LIFE_BALANCE_CATEGORIES.map(category => {
               const data = categoryBreakdown[category];
               if (data.count === 0) return null;
 
@@ -319,10 +319,10 @@ export function AnalyticsView() {
                       <span 
                         className={cn(
                           "w-3 h-3 rounded-full",
-                          category === 'growth' && "bg-category-growth",
-                          category === 'fitness' && "bg-category-fitness",
-                          category === 'nutrition' && "bg-category-nutrition",
-                          category === 'wellness' && "bg-category-wellness"
+                          category === 'health' && "bg-category-health",
+                          category === 'career' && "bg-category-career",
+                          category === 'mind' && "bg-category-mind",
+                          category === 'relationships' && "bg-category-relationships"
                         )}
                       />
                       <span className="text-sm font-medium">{CATEGORY_CONFIG[category].label}</span>
@@ -336,10 +336,10 @@ export function AnalyticsView() {
                       transition={{ duration: 0.5, delay: 0.1 }}
                       className={cn(
                         "h-full rounded-full",
-                        category === 'growth' && "bg-category-growth",
-                        category === 'fitness' && "bg-category-fitness",
-                        category === 'nutrition' && "bg-category-nutrition",
-                        category === 'wellness' && "bg-category-wellness"
+                        category === 'health' && "bg-category-health",
+                        category === 'career' && "bg-category-career",
+                        category === 'mind' && "bg-category-mind",
+                        category === 'relationships' && "bg-category-relationships"
                       )}
                     />
                   </div>
@@ -375,10 +375,10 @@ export function AnalyticsView() {
                 <div 
                   className={cn(
                     "flex items-center justify-center w-8 h-8 rounded-lg",
-                    habit.category === 'growth' && "bg-category-growth/15 text-category-growth",
-                    habit.category === 'fitness' && "bg-category-fitness/15 text-category-fitness",
-                    habit.category === 'nutrition' && "bg-category-nutrition/15 text-category-nutrition",
-                    habit.category === 'wellness' && "bg-category-wellness/15 text-category-wellness",
+                    habit.category === 'health' && "bg-category-health/15 text-category-health",
+                    habit.category === 'career' && "bg-category-career/15 text-category-career",
+                    habit.category === 'mind' && "bg-category-mind/15 text-category-mind",
+                    habit.category === 'relationships' && "bg-category-relationships/15 text-category-relationships",
                     habit.category === 'custom' && "bg-primary/15 text-primary"
                   )}
                 >
