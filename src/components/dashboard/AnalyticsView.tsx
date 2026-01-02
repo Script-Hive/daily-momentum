@@ -66,8 +66,9 @@ export function AnalyticsView() {
 
     habits.forEach(habit => {
       const stats = getHabitStats(habit);
-      breakdown[habit.category].count++;
-      breakdown[habit.category].avgCompletion += stats.completionRate;
+      const category = breakdown[habit.category] ? habit.category : 'custom';
+      breakdown[category].count++;
+      breakdown[category].avgCompletion += stats.completionRate;
     });
 
     Object.keys(breakdown).forEach(cat => {
