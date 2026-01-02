@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { LayoutDashboard, Sparkles, BarChart3, Target, Settings, Flame, BookOpen, Sunrise, Scale, Wallet, Rocket, User } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { LayoutDashboard, Sparkles, BarChart3, Target, Settings, Flame, BookOpen, Sunrise, Scale, Wallet, Rocket, User, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 export type Tab = 'dashboard' | 'routines' | 'journal' | 'analytics' | 'lifebalance' | 'goals' | 'budget' | 'projects' | 'profile' | 'settings';
 
@@ -23,26 +25,34 @@ const tabs: { id: Tab; label: string; icon: React.ElementType }[] = [
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
+// Bottom bar tabs for mobile - main 5 tabs
+const mobileBottomTabs = tabs.slice(0, 5);
+
 export function Navigation({ activeTab, onTabChange }: NavigationProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const handleMobileTabChange = (tab: Tab) => {
+    onTabChange(tab);
+    setMobileMenuOpen(false);
+  };
+
   return (
     <>
-      {/* Desktop Navigation */}
-      <nav className="hidden md:flex fixed left-0 top-0 h-screen w-64 flex-col bg-card border-r border-border p-4 z-50">
+      {/* Desktop Navigation - Hidden on mobile */}
+      <nav className="hidden lg:flex fixed left-0 top-0 h-screen w-64 flex-col bg-card border-r border-border p-4 z-50">
         {/* Logo */}
         <div className="flex items-center gap-3 px-3 py-4 mb-6">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl gradient-primary shadow-glow">
+          <div className="flex items-center justify-center w-10 h-10 rounded-xl gradient-primary shadow-glow flex-shrink-0">
             <Flame className="w-5 h-5 text-primary-foreground" />
           </div>
-          <div>
-            <h1 className="text-xl font-bold text-foreground">Streakly</h1>
-            <p className="text-xs text-muted-foreground">Build better habits</p>
+          <div className="min-w-0">
+            <h1 className="text-xl font-bold text-foreground truncate">Streakly</h1>
+            <p className="text-xs text-muted-foreground truncate">Build better habits</p>
           </div>
         </div>
 
         {/* Nav Items */}
-        <div className="flex-1 space-y-1">
+        <div className="flex-1 space-y-1 overflow-y-auto">
           {tabs.map((tab) => (
             <motion.button
               key={tab.id}
@@ -56,8 +66,8 @@ export function Navigation({ activeTab, onTabChange }: NavigationProps) {
                   : "text-muted-foreground hover:text-foreground hover:bg-secondary"
               )}
             >
-              <tab.icon className="w-5 h-5" />
-              <span className="font-medium">{tab.label}</span>
+              <tab.icon className="w-5 h-5 flex-shrink-0" />
+              <span className="font-medium truncate">{tab.label}</span>
             </motion.button>
           ))}
         </div>
@@ -70,40 +80,118 @@ export function Navigation({ activeTab, onTabChange }: NavigationProps) {
         </div>
       </nav>
 
-      {/* Mobile Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-lg border-t border-border z-50 safe-area-bottom">
-        <div className="flex items-center justify-around px-2 py-2">
-          {tabs.slice(0, 5).map((tab) => (
+      {/* Tablet Navigation - Compact sidebar */}
+      <nav className="hidden md:flex lg:hidden fixed left-0 top-0 h-screen w-16 flex-col items-center bg-card border-r border-border py-4 z-50">
+        {/* Logo */}
+        <div className="flex items-center justify-center w-10 h-10 rounded-xl gradient-primary shadow-glow mb-6">
+          <Flame className="w-5 h-5 text-primary-foreground" />
+        </div>
+
+        {/* Nav Items */}
+        <div className="flex-1 space-y-2 overflow-y-auto w-full px-2">
+          {tabs.map((tab) => (
+            <motion.button
+              key={tab.id}
+              onClick={() => onTabChange(tab.id)}
+              whileTap={{ scale: 0.95 }}
+              title={tab.label}
+              className={cn(
+                "w-full flex items-center justify-center p-3 rounded-xl transition-all duration-200",
+                activeTab === tab.id
+                  ? "bg-primary text-primary-foreground shadow-glow"
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+              )}
+            >
+              <tab.icon className="w-5 h-5" />
+            </motion.button>
+          ))}
+        </div>
+      </nav>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-lg border-t border-border z-50 pb-safe">
+        <div className="flex items-center justify-around px-1 py-2 max-w-md mx-auto">
+          {mobileBottomTabs.map((tab) => (
             <motion.button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
               whileTap={{ scale: 0.9 }}
               className={cn(
-                "flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all",
+                "flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-xl transition-all min-w-0 flex-1",
                 activeTab === tab.id
                   ? "text-primary"
                   : "text-muted-foreground"
               )}
             >
               <tab.icon className={cn(
-                "w-5 h-5 transition-transform",
+                "w-5 h-5 transition-transform flex-shrink-0",
                 activeTab === tab.id && "scale-110"
               )} />
-              <span className="text-[10px] font-medium">{tab.label}</span>
+              <span className="text-[10px] font-medium truncate max-w-full">{tab.label}</span>
             </motion.button>
           ))}
         </div>
       </nav>
 
-      {/* Mobile Header */}
-      <header className="md:hidden fixed top-0 left-0 right-0 bg-card/95 backdrop-blur-lg border-b border-border z-40 px-4 py-3">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-9 h-9 rounded-lg gradient-primary shadow-glow">
-            <Flame className="w-4 h-4 text-primary-foreground" />
+      {/* Mobile Header with Hamburger Menu */}
+      <header className="md:hidden fixed top-0 left-0 right-0 bg-card/95 backdrop-blur-lg border-b border-border z-40 px-4 py-3 pt-safe">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="flex items-center justify-center w-9 h-9 rounded-lg gradient-primary shadow-glow flex-shrink-0">
+              <Flame className="w-4 h-4 text-primary-foreground" />
+            </div>
+            <h1 className="text-lg font-bold text-foreground truncate">Streakly</h1>
           </div>
-          <div>
-            <h1 className="text-lg font-bold text-foreground">Streakly</h1>
-          </div>
+
+          {/* Hamburger Menu for accessing all tabs */}
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="flex-shrink-0">
+                <Menu className="w-5 h-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[280px] sm:w-[320px] p-0">
+              <div className="flex flex-col h-full">
+                {/* Sheet Header */}
+                <div className="flex items-center gap-3 px-4 py-4 border-b border-border">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-xl gradient-primary shadow-glow">
+                    <Flame className="w-5 h-5 text-primary-foreground" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-foreground">Menu</h2>
+                    <p className="text-xs text-muted-foreground">Navigate your journey</p>
+                  </div>
+                </div>
+
+                {/* Menu Items */}
+                <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+                  {tabs.map((tab) => (
+                    <motion.button
+                      key={tab.id}
+                      onClick={() => handleMobileTabChange(tab.id)}
+                      whileTap={{ scale: 0.98 }}
+                      className={cn(
+                        "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200",
+                        activeTab === tab.id
+                          ? "bg-primary text-primary-foreground shadow-glow"
+                          : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                      )}
+                    >
+                      <tab.icon className="w-5 h-5 flex-shrink-0" />
+                      <span className="font-medium">{tab.label}</span>
+                    </motion.button>
+                  ))}
+                </div>
+
+                {/* Footer */}
+                <div className="px-4 py-4 border-t border-border">
+                  <p className="text-xs text-muted-foreground text-center">
+                    Track your progress daily
+                  </p>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </header>
     </>
