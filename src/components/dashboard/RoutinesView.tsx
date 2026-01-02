@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { format } from 'date-fns';
 import {
   Sunrise,
   Moon,
@@ -9,12 +8,11 @@ import {
   Play,
   RotateCcw,
   Trash2,
-  ChevronRight,
   Flame,
-  Clock,
   TrendingUp,
   Sparkles,
   PartyPopper,
+  Droplets,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,14 +21,8 @@ import { Badge } from '@/components/ui/badge';
 import { HabitIcon } from '@/components/ui/HabitIcon';
 import { useRoutines } from '@/hooks/useRoutines';
 import { RoutineType, Routine } from '@/types/routine';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { SkinCareSection } from '@/components/skincare/SkinCareCard';
+import { useSkinCare } from '@/hooks/useSkinCare';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -43,6 +35,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 
 export function RoutinesView() {
@@ -423,31 +416,51 @@ export function RoutinesView() {
         </div>
       )}
 
-      {/* Routines Grid */}
-      <div className="grid md:grid-cols-2 gap-6">
-        <RoutineCard routine={morningRoutine} type="morning" />
-        <RoutineCard routine={nightRoutine} type="night" />
-      </div>
+      {/* Tabs for Routines and Skin Care */}
+      <Tabs defaultValue="routines" className="space-y-4">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="routines" className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4" />
+            Habits
+          </TabsTrigger>
+          <TabsTrigger value="skincare" className="flex items-center gap-2">
+            <Droplets className="w-4 h-4" />
+            Skin Care
+          </TabsTrigger>
+        </TabsList>
 
-      {/* Tips */}
-      <Card className="bg-gradient-to-br from-primary/5 to-accent/5">
-        <CardContent className="p-6">
-          <div className="flex items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <Sparkles className="w-5 h-5 text-primary" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-foreground mb-1">Routine Tips</h3>
-              <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• Start small — 3-5 habits per routine works best</li>
-                <li>• Morning routines set your energy for the day</li>
-                <li>• Night routines help you wind down and reflect</li>
-                <li>• Consistency matters more than perfection</li>
-              </ul>
-            </div>
+        <TabsContent value="routines" className="space-y-6">
+          {/* Routines Grid */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <RoutineCard routine={morningRoutine} type="morning" />
+            <RoutineCard routine={nightRoutine} type="night" />
           </div>
-        </CardContent>
-      </Card>
+
+          {/* Tips */}
+          <Card className="bg-gradient-to-br from-primary/5 to-accent/5">
+            <CardContent className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Sparkles className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">Routine Tips</h3>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• Start small — 3-5 habits per routine works best</li>
+                    <li>• Morning routines set your energy for the day</li>
+                    <li>• Night routines help you wind down and reflect</li>
+                    <li>• Consistency matters more than perfection</li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="skincare">
+          <SkinCareSection />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

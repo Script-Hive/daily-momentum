@@ -37,6 +37,11 @@ export function SettingsView() {
     localStorage.removeItem('streakly-goals');
     localStorage.removeItem('streakly-journal');
     localStorage.removeItem('streakly-journal-settings');
+    localStorage.removeItem('streakly-routines');
+    localStorage.removeItem('streakly-routine-completions');
+    localStorage.removeItem('streakly-skincare');
+    localStorage.removeItem('streakly-skincare-completions');
+    localStorage.removeItem('streakly-skincare-settings');
     window.location.reload();
   };
 
