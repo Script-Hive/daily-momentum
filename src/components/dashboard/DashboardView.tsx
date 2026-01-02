@@ -63,9 +63,10 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
 
     const today = format(new Date(), 'yyyy-MM-dd');
     habits.forEach(habit => {
-      stats[habit.category].total++;
+      const category = stats[habit.category] ? habit.category : 'custom';
+      stats[category].total++;
       if (habit.completedDates.includes(today)) {
-        stats[habit.category].completed++;
+        stats[category].completed++;
       }
     });
 
