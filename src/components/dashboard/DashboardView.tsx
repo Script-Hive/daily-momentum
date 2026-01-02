@@ -28,12 +28,15 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
     getWeakestHabit
   } = useHabits();
   
+  const { getTodayEntry } = useJournal();
+  
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedCategory, setSelectedCategory] = useState<HabitCategory | 'all'>('all');
 
   const todayProgress = getTodayProgress();
   const bestHabit = getBestHabit();
   const weakestHabit = getWeakestHabit();
+  const todayJournalEntry = getTodayEntry();
 
   const filteredHabits = useMemo(() => {
     if (selectedCategory === 'all') return habits;
@@ -74,9 +77,6 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
       </div>
     );
   }
-
-  const { getTodayEntry } = useJournal();
-  const todayJournalEntry = getTodayEntry();
 
   return (
     <div className="space-y-6">
