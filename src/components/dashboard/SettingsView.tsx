@@ -35,6 +35,8 @@ export function SettingsView() {
   const handleClearData = () => {
     localStorage.removeItem('streakly-habits');
     localStorage.removeItem('streakly-goals');
+    localStorage.removeItem('streakly-journal');
+    localStorage.removeItem('streakly-journal-settings');
     window.location.reload();
   };
 
