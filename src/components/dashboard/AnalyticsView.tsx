@@ -59,6 +59,8 @@ export function AnalyticsView() {
       fitness: { count: 0, avgCompletion: 0 },
       nutrition: { count: 0, avgCompletion: 0 },
       wellness: { count: 0, avgCompletion: 0 },
+      discipline: { count: 0, avgCompletion: 0 },
+      finance: { count: 0, avgCompletion: 0 },
       custom: { count: 0, avgCompletion: 0 },
     };
 
