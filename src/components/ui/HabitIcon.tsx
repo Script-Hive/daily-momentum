@@ -14,3 +14,6 @@ export function HabitIcon({ name, ...props }: HabitIconProps) {
   
   return <IconComponent {...props} />;
 }
+
+// Alias for easier import
+export const Icon = HabitIcon;

@@ -6,6 +6,8 @@ import { JournalView } from '@/components/dashboard/JournalView';
 import { AnalyticsView } from '@/components/dashboard/AnalyticsView';
 import { LifeBalanceView } from '@/components/dashboard/LifeBalanceView';
 import { GoalsView } from '@/components/dashboard/GoalsView';
+import { BudgetView } from '@/components/dashboard/BudgetView';
+import { ProjectsView } from '@/components/dashboard/ProjectsView';
 import { SettingsView } from '@/components/dashboard/SettingsView';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -34,6 +36,10 @@ const Index = () => {
         return <LifeBalanceView />;
       case 'goals':
         return <GoalsView />;
+      case 'budget':
+        return <BudgetView />;
+      case 'projects':
+        return <ProjectsView />;
       case 'settings':
         return <SettingsView />;
       default:
