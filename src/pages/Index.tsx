@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Navigation, Tab } from '@/components/layout/Navigation';
 import { DashboardView } from '@/components/dashboard/DashboardView';
-import { DevelopmentView } from '@/components/dashboard/DevelopmentView';
+import { RoutinesView } from '@/components/dashboard/RoutinesView';
 import { JournalView } from '@/components/dashboard/JournalView';
 import { AnalyticsView } from '@/components/dashboard/AnalyticsView';
+import { LifeBalanceView } from '@/components/dashboard/LifeBalanceView';
 import { GoalsView } from '@/components/dashboard/GoalsView';
 import { SettingsView } from '@/components/dashboard/SettingsView';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -23,12 +24,14 @@ const Index = () => {
     switch (activeTab) {
       case 'dashboard':
         return <DashboardView onNavigateToJournal={() => setActiveTab('journal')} />;
-      case 'development':
-        return <DevelopmentView />;
+      case 'routines':
+        return <RoutinesView />;
       case 'journal':
         return <JournalView />;
       case 'analytics':
         return <AnalyticsView />;
+      case 'lifebalance':
+        return <LifeBalanceView />;
       case 'goals':
         return <GoalsView />;
       case 'settings':

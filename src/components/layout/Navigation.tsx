@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { LayoutDashboard, Sparkles, BarChart3, Target, Settings, Menu, X, Flame, BookOpen } from 'lucide-react';
+import { LayoutDashboard, Sparkles, BarChart3, Target, Settings, Flame, BookOpen, Sunrise, Scale } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 
-export type Tab = 'dashboard' | 'development' | 'journal' | 'analytics' | 'goals' | 'settings';
+export type Tab = 'dashboard' | 'routines' | 'journal' | 'analytics' | 'lifebalance' | 'goals' | 'settings';
 
 interface NavigationProps {
   activeTab: Tab;
@@ -13,9 +12,10 @@ interface NavigationProps {
 
 const tabs: { id: Tab; label: string; icon: React.ElementType }[] = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { id: 'development', label: 'Development', icon: Sparkles },
+  { id: 'routines', label: 'Routines', icon: Sunrise },
   { id: 'journal', label: 'Journal', icon: BookOpen },
   { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+  { id: 'lifebalance', label: 'Life Balance', icon: Scale },
   { id: 'goals', label: 'Goals', icon: Target },
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
