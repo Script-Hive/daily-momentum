@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, ConfirmationResult } from 'firebase/auth';
+import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, ConfirmationResult, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 // Firebase configuration - Replace these with your Firebase project credentials
 // These are client-side keys and are safe to expose (security is handled by Firebase)
@@ -93,4 +93,36 @@ export const verifyOTP = async (
 export const signOut = async (): Promise<void> => {
   await auth.signOut();
   confirmationResult = null;
+};
+
+// Google Sign-In
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
+  prompt: 'select_account'
+});
+
+export const signInWithGoogle = async (): Promise<{ success: boolean; error?: string; user?: any }> => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    return { success: true, user: result.user };
+  } catch (error: any) {
+    let errorMessage = 'Failed to sign in with Google. Please try again.';
+    
+    switch (error.code) {
+      case 'auth/popup-closed-by-user':
+        errorMessage = 'Sign-in popup was closed. Please try again.';
+        break;
+      case 'auth/popup-blocked':
+        errorMessage = 'Popup was blocked. Please allow popups and try again.';
+        break;
+      case 'auth/cancelled-popup-request':
+        errorMessage = 'Sign-in was cancelled. Please try again.';
+        break;
+      case 'auth/account-exists-with-different-credential':
+        errorMessage = 'An account already exists with this email using a different sign-in method.';
+        break;
+    }
+    
+    return { success: false, error: errorMessage };
+  }
 };

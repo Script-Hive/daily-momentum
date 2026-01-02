@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { User, onAuthStateChanged, RecaptchaVerifier } from 'firebase/auth';
-import { auth, setupRecaptcha, sendOTP, verifyOTP, signOut } from '@/lib/firebase';
+import { auth, setupRecaptcha, sendOTP, verifyOTP, signOut, signInWithGoogle } from '@/lib/firebase';
 
 export type AuthStep = 'phone' | 'otp' | 'success';
 
@@ -13,6 +13,7 @@ export function usePhoneAuth() {
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const [verifying, setVerifying] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0);
   const [recaptchaVerifier, setRecaptchaVerifier] = useState<RecaptchaVerifier | null>(null);
 
@@ -134,6 +135,33 @@ export function usePhoneAuth() {
     setError(null);
   };
 
+  const handleGoogleSignIn = async () => {
+    setError(null);
+    setGoogleLoading(true);
+
+    try {
+      const result = await signInWithGoogle();
+      
+      if (result.success) {
+        setStep('success');
+        if (result.user) {
+          localStorage.setItem('streakly-phone-user', JSON.stringify({
+            email: result.user.email,
+            displayName: result.user.displayName,
+            uid: result.user.uid,
+            lastLogin: new Date().toISOString()
+          }));
+        }
+      } else {
+        setError(result.error || 'Failed to sign in with Google');
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
+
   return {
     user,
     loading,
@@ -143,12 +171,14 @@ export function usePhoneAuth() {
     error,
     sending,
     verifying,
+    googleLoading,
     resendCooldown,
     setOtp,
     handleSendOTP,
     handleVerifyOTP,
     handleResendOTP,
     handleSignOut,
+    handleGoogleSignIn,
     resetToPhone,
     initRecaptcha,
   };
