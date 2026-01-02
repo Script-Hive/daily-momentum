@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Moon, Sun, Trash2, RefreshCw, Info, ExternalLink } from 'lucide-react';
+import { Moon, Sun, Trash2, RefreshCw, Info, ExternalLink, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import {
@@ -18,11 +19,18 @@ import { toast } from 'sonner';
 
 export function SettingsView() {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const isDark = document.documentElement.classList.contains('dark');
     setIsDarkMode(isDark);
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('streakly-auth');
+    toast.success('Successfully logged out');
+    navigate('/');
+  };
 
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
@@ -169,6 +177,49 @@ export function SettingsView() {
               </AlertDialogContent>
             </AlertDialog>
           </div>
+        </div>
+      </motion.section>
+
+      {/* Account */}
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+        className="bg-card rounded-2xl p-5 shadow-md border border-border/50 space-y-4"
+      >
+        <h2 className="text-lg font-semibold text-foreground">Account</h2>
+
+        <div className="flex items-center justify-between py-2">
+          <div className="flex items-center gap-3">
+            <LogOut className="w-5 h-5 text-muted-foreground" />
+            <div>
+              <p className="font-medium text-foreground">Sign Out</p>
+              <p className="text-sm text-muted-foreground">
+                Log out of your account
+              </p>
+            </div>
+          </div>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                Logout
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Sign out?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to log out of your account?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleLogout}>
+                  Sign Out
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </motion.section>
 
