@@ -15,6 +15,8 @@ interface DashboardViewProps {
   onNavigateToJournal?: () => void;
 }
 
+const LIFE_BALANCE_CATEGORIES: HabitCategory[] = ['health', 'career', 'mind', 'relationships'];
+
 export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
   const { 
     habits, 
@@ -52,12 +54,10 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
 
   const categoryStats = useMemo(() => {
     const stats: Record<HabitCategory, { total: number; completed: number }> = {
-      growth: { total: 0, completed: 0 },
-      fitness: { total: 0, completed: 0 },
-      nutrition: { total: 0, completed: 0 },
-      wellness: { total: 0, completed: 0 },
-      discipline: { total: 0, completed: 0 },
-      finance: { total: 0, completed: 0 },
+      health: { total: 0, completed: 0 },
+      career: { total: 0, completed: 0 },
+      mind: { total: 0, completed: 0 },
+      relationships: { total: 0, completed: 0 },
       custom: { total: 0, completed: 0 },
     };
 
@@ -212,7 +212,7 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
           >
             All ({habits.length})
           </Button>
-          {(['growth', 'fitness', 'nutrition', 'wellness'] as HabitCategory[]).map(cat => {
+          {LIFE_BALANCE_CATEGORIES.map(cat => {
             const count = habits.filter(h => h.category === cat).length;
             if (count === 0) return null;
             return (
@@ -224,10 +224,10 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
                 className={cn(
                   "rounded-full gap-2",
                   selectedCategory === cat && cn(
-                    cat === 'growth' && "bg-category-growth text-white hover:bg-category-growth/90",
-                    cat === 'fitness' && "bg-category-fitness text-white hover:bg-category-fitness/90",
-                    cat === 'nutrition' && "bg-category-nutrition text-white hover:bg-category-nutrition/90",
-                    cat === 'wellness' && "bg-category-wellness text-white hover:bg-category-wellness/90"
+                    cat === 'health' && "bg-category-health text-white hover:bg-category-health/90",
+                    cat === 'career' && "bg-category-career text-white hover:bg-category-career/90",
+                    cat === 'mind' && "bg-category-mind text-white hover:bg-category-mind/90",
+                    cat === 'relationships' && "bg-category-relationships text-white hover:bg-category-relationships/90"
                   )
                 )}
               >

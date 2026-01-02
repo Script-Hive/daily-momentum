@@ -38,13 +38,11 @@
     --accent-foreground: 38 92% 15%;
     --accent-glow: 38 100% 60%;
 
-    /* Category colors */
-    --category-growth: 220 80% 55%;
-    --category-fitness: 160 84% 39%;
-    --category-nutrition: 85 70% 45%;
-    --category-wellness: 270 60% 60%;
-    --category-discipline: 0 70% 50%;
-    --category-finance: 45 90% 48%;
+    /* Category colors - Life Balance areas */
+    --category-health: 160 84% 39%;
+    --category-career: 220 80% 55%;
+    --category-mind: 270 60% 60%;
+    --category-relationships: 340 70% 55%;
 
     /* Calm pastel palette */
     --calm-lavender: 270 50% 85%;

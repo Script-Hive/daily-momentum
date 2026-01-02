@@ -47,10 +47,10 @@ export function HabitCard({ habit, stats, onToggle, onRemove, currentMonth }: Ha
         <div 
           className={cn(
             "flex items-center justify-center w-10 h-10 rounded-lg",
-            habit.category === 'growth' && "bg-category-growth/15 text-category-growth",
-            habit.category === 'fitness' && "bg-category-fitness/15 text-category-fitness",
-            habit.category === 'nutrition' && "bg-category-nutrition/15 text-category-nutrition",
-            habit.category === 'wellness' && "bg-category-wellness/15 text-category-wellness",
+            habit.category === 'health' && "bg-category-health/15 text-category-health",
+            habit.category === 'career' && "bg-category-career/15 text-category-career",
+            habit.category === 'mind' && "bg-category-mind/15 text-category-mind",
+            habit.category === 'relationships' && "bg-category-relationships/15 text-category-relationships",
             habit.category === 'custom' && "bg-primary/15 text-primary"
           )}
         >
@@ -129,10 +129,10 @@ export function HabitCard({ habit, stats, onToggle, onRemove, currentMonth }: Ha
                 "aspect-square rounded-md flex items-center justify-center text-[10px] font-medium transition-all duration-200",
                 isFutureDate && "opacity-30 cursor-not-allowed",
                 !isCompleted && !isFutureDate && "bg-secondary hover:bg-secondary/80 text-muted-foreground",
-                isCompleted && habit.category === 'growth' && "bg-category-growth text-white",
-                isCompleted && habit.category === 'fitness' && "bg-category-fitness text-white",
-                isCompleted && habit.category === 'nutrition' && "bg-category-nutrition text-white",
-                isCompleted && habit.category === 'wellness' && "bg-category-wellness text-white",
+                isCompleted && habit.category === 'health' && "bg-category-health text-white",
+                isCompleted && habit.category === 'career' && "bg-category-career text-white",
+                isCompleted && habit.category === 'mind' && "bg-category-mind text-white",
+                isCompleted && habit.category === 'relationships' && "bg-category-relationships text-white",
                 isCompleted && habit.category === 'custom' && "bg-primary text-primary-foreground",
                 isTodayDate && !isCompleted && "ring-2 ring-primary ring-offset-1 ring-offset-card"
               )}
@@ -179,10 +179,10 @@ export function HabitCard({ habit, stats, onToggle, onRemove, currentMonth }: Ha
               transition={{ duration: 0.5, ease: "easeOut" }}
               className={cn(
                 "h-full rounded-full",
-                habit.category === 'growth' && "bg-category-growth",
-                habit.category === 'fitness' && "bg-category-fitness",
-                habit.category === 'nutrition' && "bg-category-nutrition",
-                habit.category === 'wellness' && "bg-category-wellness",
+                habit.category === 'health' && "bg-category-health",
+                habit.category === 'career' && "bg-category-career",
+                habit.category === 'mind' && "bg-category-mind",
+                habit.category === 'relationships' && "bg-category-relationships",
                 habit.category === 'custom' && "bg-primary"
               )}
             />
