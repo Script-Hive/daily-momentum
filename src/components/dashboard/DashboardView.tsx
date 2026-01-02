@@ -82,26 +82,28 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground truncate">
             Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 18 ? 'afternoon' : 'evening'}!
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-sm sm:text-base text-muted-foreground mt-0.5 sm:mt-1">
             {format(new Date(), 'EEEE, MMMM d, yyyy')}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-shrink-0">
           {onNavigateToJournal && (
             <Button 
               variant="outline" 
               onClick={onNavigateToJournal}
-              className="gap-2"
+              className="gap-2 text-xs sm:text-sm h-9 sm:h-10"
+              size="sm"
             >
-              <PenTool className="w-4 h-4" />
-              {todayJournalEntry ? 'Continue Journal' : "Write Today's Entry"}
+              <PenTool className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="hidden xs:inline">{todayJournalEntry ? 'Continue Journal' : "Write Today's Entry"}</span>
+              <span className="xs:hidden">Journal</span>
             </Button>
           )}
           <AddHabitDialog onAddHabit={addHabit} existingHabits={habits} />
@@ -109,23 +111,23 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         {/* Today's Progress */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="col-span-2 sm:col-span-1 bg-card rounded-2xl p-5 shadow-md border border-border/50"
+          className="col-span-2 sm:col-span-1 bg-card rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-5 shadow-md border border-border/50"
         >
-          <div className="flex items-center gap-4">
-            <ProgressRing percentage={todayProgress.percentage} size={70} strokeWidth={6}>
-              <span className="text-lg font-bold">{todayProgress.percentage}%</span>
+          <div className="flex items-center gap-3 sm:gap-4">
+            <ProgressRing percentage={todayProgress.percentage} size={56} strokeWidth={5}>
+              <span className="text-sm sm:text-lg font-bold">{todayProgress.percentage}%</span>
             </ProgressRing>
-            <div>
-              <p className="text-sm text-muted-foreground">Today's Progress</p>
-              <p className="text-xl font-bold text-foreground">
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm text-muted-foreground truncate">Today's Progress</p>
+              <p className="text-lg sm:text-xl font-bold text-foreground">
                 {todayProgress.completedCount}/{todayProgress.totalCount}
               </p>
-              <p className="text-xs text-muted-foreground">habits completed</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">habits completed</p>
             </div>
           </div>
         </motion.div>
@@ -135,16 +137,16 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-card rounded-2xl p-5 shadow-md border border-border/50"
+          className="bg-card rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-5 shadow-md border border-border/50"
         >
-          <div className="flex items-center gap-3 mb-2">
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-streak/15">
-              <Flame className="w-5 h-5 text-streak animate-streak-pulse" />
+          <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+            <div className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-streak/15 flex-shrink-0">
+              <Flame className="w-4 h-4 sm:w-5 sm:h-5 text-streak animate-streak-pulse" />
             </div>
-            <span className="text-sm font-medium text-muted-foreground">Total Streaks</span>
+            <span className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Total Streaks</span>
           </div>
-          <p className="text-3xl font-bold text-foreground">{totalStreak}</p>
-          <p className="text-xs text-muted-foreground mt-1">days combined</p>
+          <p className="text-2xl sm:text-3xl font-bold text-foreground">{totalStreak}</p>
+          <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1">days combined</p>
         </motion.div>
 
         {/* Best Habit */}
@@ -152,23 +154,23 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-card rounded-2xl p-5 shadow-md border border-border/50"
+          className="bg-card rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-5 shadow-md border border-border/50"
         >
-          <div className="flex items-center gap-3 mb-2">
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-success/15">
-              <Award className="w-5 h-5 text-success" />
+          <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+            <div className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-success/15 flex-shrink-0">
+              <Award className="w-4 h-4 sm:w-5 sm:h-5 text-success" />
             </div>
-            <span className="text-sm font-medium text-muted-foreground">Best Habit</span>
+            <span className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Best Habit</span>
           </div>
           {bestHabit ? (
             <>
-              <p className="text-lg font-bold text-foreground truncate">{bestHabit.name}</p>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-base sm:text-lg font-bold text-foreground truncate">{bestHabit.name}</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1">
                 {getHabitStats(bestHabit).completionRate}% completion
               </p>
             </>
           ) : (
-            <p className="text-sm text-muted-foreground">Add habits to track</p>
+            <p className="text-xs sm:text-sm text-muted-foreground">Add habits to track</p>
           )}
         </motion.div>
 
@@ -177,37 +179,37 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-card rounded-2xl p-5 shadow-md border border-border/50"
+          className="bg-card rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-5 shadow-md border border-border/50"
         >
-          <div className="flex items-center gap-3 mb-2">
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-warning/15">
-              <Target className="w-5 h-5 text-warning" />
+          <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+            <div className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-warning/15 flex-shrink-0">
+              <Target className="w-4 h-4 sm:w-5 sm:h-5 text-warning" />
             </div>
-            <span className="text-sm font-medium text-muted-foreground">Needs Focus</span>
+            <span className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Needs Focus</span>
           </div>
           {weakestHabit ? (
             <>
-              <p className="text-lg font-bold text-foreground truncate">{weakestHabit.name}</p>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-base sm:text-lg font-bold text-foreground truncate">{weakestHabit.name}</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1">
                 {getHabitStats(weakestHabit).completionRate}% completion
               </p>
             </>
           ) : (
-            <p className="text-sm text-muted-foreground">Add habits to track</p>
+            <p className="text-xs sm:text-sm text-muted-foreground">Add habits to track</p>
           )}
         </motion.div>
       </div>
 
       {/* Category Filter & Month Selector */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        {/* Category Pills */}
-        <div className="flex flex-wrap gap-2">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        {/* Category Pills - Scrollable on mobile */}
+        <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0 -mx-3 px-3 sm:mx-0 sm:px-0 sm:flex-wrap scrollbar-hide">
           <Button
             variant={selectedCategory === 'all' ? 'default' : 'secondary'}
             size="sm"
             onClick={() => setSelectedCategory('all')}
             className={cn(
-              "rounded-full",
+              "rounded-full whitespace-nowrap flex-shrink-0 h-8 text-xs sm:text-sm",
               selectedCategory === 'all' && "gradient-primary text-primary-foreground"
             )}
           >
@@ -216,6 +218,7 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
           {LIFE_BALANCE_CATEGORIES.map(cat => {
             const count = habits.filter(h => h.category === cat).length;
             if (count === 0) return null;
+            const config = CATEGORY_CONFIG[cat];
             return (
               <Button
                 key={cat}
@@ -223,7 +226,7 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
                 size="sm"
                 onClick={() => setSelectedCategory(cat)}
                 className={cn(
-                  "rounded-full gap-2",
+                  "rounded-full gap-1.5 whitespace-nowrap flex-shrink-0 h-8 text-xs sm:text-sm",
                   selectedCategory === cat && cn(
                     cat === 'health' && "bg-category-health text-white hover:bg-category-health/90",
                     cat === 'career' && "bg-category-career text-white hover:bg-category-career/90",
@@ -232,28 +235,30 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
                   )
                 )}
               >
-                {CATEGORY_CONFIG[cat].label} ({count})
+                {config?.label || cat} ({count})
               </Button>
             );
           })}
         </div>
 
         {/* Month Selector */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2 justify-center sm:justify-end flex-shrink-0">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setCurrentMonth(prev => subMonths(prev, 1))}
+            className="h-8 w-8 sm:h-9 sm:w-9"
           >
             <ChevronLeft className="w-4 h-4" />
           </Button>
-          <span className="text-sm font-medium min-w-[120px] text-center">
+          <span className="text-xs sm:text-sm font-medium min-w-[100px] sm:min-w-[120px] text-center">
             {format(currentMonth, 'MMMM yyyy')}
           </span>
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setCurrentMonth(prev => addMonths(prev, 1))}
+            className="h-8 w-8 sm:h-9 sm:w-9"
           >
             <ChevronRight className="w-4 h-4" />
           </Button>

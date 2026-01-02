@@ -283,6 +283,39 @@
     background-clip: text;
   }
 
+  /* Safe area utilities for mobile */
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .pl-safe {
+    padding-left: env(safe-area-inset-left);
+  }
+
+  .pr-safe {
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* Touch-friendly tap targets */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Prevent text overflow */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Responsive container padding */
+  .container-padding {
+    @apply px-3 sm:px-4 md:px-6 lg:px-8;
+  }
+
   .animate-fade-in {
     animation: fadeIn 0.5s ease-out;
   }
@@ -317,5 +350,24 @@
   @keyframes pulseGlow {
     0%, 100% { box-shadow: var(--shadow-glow); }
     50% { box-shadow: 0 0 40px hsl(160 84% 39% / 0.25); }
+  }
+}
+
+/* Responsive typography scale */
+@layer base {
+  html {
+    font-size: 14px;
+  }
+
+  @media (min-width: 640px) {
+    html {
+      font-size: 15px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    html {
+      font-size: 16px;
+    }
   }
 }
