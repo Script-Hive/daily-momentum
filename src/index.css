@@ -46,6 +46,18 @@
     --category-discipline: 0 70% 50%;
     --category-finance: 45 90% 48%;
 
+    /* Calm pastel palette */
+    --calm-lavender: 270 50% 85%;
+    --calm-lavender-foreground: 270 40% 25%;
+    --calm-mist: 200 40% 88%;
+    --calm-mist-foreground: 200 30% 25%;
+    --calm-sage: 140 30% 82%;
+    --calm-sage-foreground: 140 25% 25%;
+    --calm-peach: 20 60% 88%;
+    --calm-peach-foreground: 20 50% 25%;
+    --calm-beige: 35 30% 90%;
+    --calm-beige-foreground: 35 25% 25%;
+
     /* Status colors */
     --success: 160 84% 39%;
     --success-foreground: 0 0% 100%;
