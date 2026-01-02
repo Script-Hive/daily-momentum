@@ -22,7 +22,7 @@ const LandingPage = () => {
     // Simple auth check with default credentials
     setTimeout(() => {
       if (email === 'shreyas' && password === 'Shreyas@333') {
-        localStorage.setItem('streakly-auth', JSON.stringify({ 
+        localStorage.setItem('glowhabit-auth', JSON.stringify({ 
           email, 
           isAuthenticated: true,
           loginTime: new Date().toISOString()

@@ -94,7 +94,7 @@ export function usePhoneAuth() {
         setStep('success');
         // Store user phone in localStorage for persistence
         if (result.user) {
-          localStorage.setItem('streakly-phone-user', JSON.stringify({
+          localStorage.setItem('glowhabit-phone-user', JSON.stringify({
             phoneNumber: result.user.phoneNumber,
             uid: result.user.uid,
             lastLogin: new Date().toISOString()
@@ -126,7 +126,7 @@ export function usePhoneAuth() {
     setOtp('');
     setError(null);
     setRecaptchaVerifier(null);
-    localStorage.removeItem('streakly-phone-user');
+    localStorage.removeItem('glowhabit-phone-user');
   };
 
   const resetToPhone = () => {
@@ -145,7 +145,7 @@ export function usePhoneAuth() {
       if (result.success) {
         setStep('success');
         if (result.user) {
-          localStorage.setItem('streakly-phone-user', JSON.stringify({
+          localStorage.setItem('glowhabit-phone-user', JSON.stringify({
             email: result.user.email,
             displayName: result.user.displayName,
             uid: result.user.uid,

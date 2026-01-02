@@ -10,9 +10,9 @@ import {
   NIGHT_SKINCARE_TEMPLATE,
 } from '@/types/skincare';
 
-const STORAGE_KEY = 'streakly-skincare';
-const COMPLETIONS_KEY = 'streakly-skincare-completions';
-const SETTINGS_KEY = 'streakly-skincare-settings';
+const STORAGE_KEY = 'glowhabit-skincare';
+const COMPLETIONS_KEY = 'glowhabit-skincare-completions';
+const SETTINGS_KEY = 'glowhabit-skincare-settings';
 
 const generateId = () => Math.random().toString(36).substring(2, 11);
 

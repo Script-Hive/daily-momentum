@@ -27,7 +27,7 @@ export function SettingsView() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('streakly-auth');
+    localStorage.removeItem('glowhabit-auth');
     toast.success('Successfully logged out');
     navigate('/');
   };
@@ -41,20 +41,20 @@ export function SettingsView() {
   };
 
   const handleClearData = () => {
-    localStorage.removeItem('streakly-habits');
-    localStorage.removeItem('streakly-goals');
-    localStorage.removeItem('streakly-journal');
-    localStorage.removeItem('streakly-journal-settings');
-    localStorage.removeItem('streakly-routines');
-    localStorage.removeItem('streakly-routine-completions');
-    localStorage.removeItem('streakly-skincare');
-    localStorage.removeItem('streakly-skincare-completions');
-    localStorage.removeItem('streakly-skincare-settings');
+    localStorage.removeItem('glowhabit-habits');
+    localStorage.removeItem('glowhabit-goals');
+    localStorage.removeItem('glowhabit-journal');
+    localStorage.removeItem('glowhabit-journal-settings');
+    localStorage.removeItem('glowhabit-routines');
+    localStorage.removeItem('glowhabit-routine-completions');
+    localStorage.removeItem('glowhabit-skincare');
+    localStorage.removeItem('glowhabit-skincare-completions');
+    localStorage.removeItem('glowhabit-skincare-settings');
     window.location.reload();
   };
 
   const handleResetToDefaults = () => {
-    localStorage.removeItem('streakly-habits');
+    localStorage.removeItem('glowhabit-habits');
     window.location.reload();
   };
 
@@ -64,7 +64,7 @@ export function SettingsView() {
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Settings</h1>
         <p className="text-muted-foreground mt-1">
-          Customize your Streakly experience
+          Customize your GlowHabit experience
         </p>
       </div>
 
@@ -230,7 +230,7 @@ export function SettingsView() {
         transition={{ delay: 0.2 }}
         className="bg-card rounded-2xl p-5 shadow-md border border-border/50 space-y-4"
       >
-        <h2 className="text-lg font-semibold text-foreground">About Streakly</h2>
+        <h2 className="text-lg font-semibold text-foreground">About GlowHabit</h2>
         
         <div className="space-y-3">
           <div className="flex items-center gap-3">
@@ -245,7 +245,7 @@ export function SettingsView() {
 
           <div className="pt-4 border-t border-border">
             <p className="text-sm text-muted-foreground">
-              Streakly is a beautiful, minimal habit tracker designed to help you build consistent routines and achieve your personal development goals.
+              GlowHabit is a beautiful, minimal habit tracker designed to help you build consistent routines and achieve your personal development goals.
             </p>
           </div>
 

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { BudgetEntry, BudgetStats } from '@/types/discipline';
 import { format, parseISO, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from 'date-fns';
 
-const STORAGE_KEY = 'streakly-budget';
+const STORAGE_KEY = 'glowhabit-budget';
 
 export function useBudget() {
   const [entries, setEntries] = useState<BudgetEntry[]>([]);

@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Project, DeepWorkSession, ProjectStats, DeepWorkStats, PROJECT_COLORS } from '@/types/project';
 import { format, parseISO, startOfWeek, endOfWeek, isWithinInterval, subDays } from 'date-fns';
 
-const PROJECTS_KEY = 'streakly-projects';
-const SESSIONS_KEY = 'streakly-deepwork-sessions';
+const PROJECTS_KEY = 'glowhabit-projects';
+const SESSIONS_KEY = 'glowhabit-deepwork-sessions';
 
 export function useProjects() {
   const [projects, setProjects] = useState<Project[]>([]);

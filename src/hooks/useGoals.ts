@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Goal } from '@/types/habit';
 
-const STORAGE_KEY = 'streakly-goals';
+const STORAGE_KEY = 'glowhabit-goals';
 
 function generateId(): string {
   return Math.random().toString(36).substring(2, 15);

@@ -46,7 +46,7 @@ export function Navigation({ activeTab, onTabChange }: NavigationProps) {
             <Flame className="w-5 h-5 text-primary-foreground" />
           </div>
           <div className="min-w-0">
-            <h1 className="text-xl font-bold text-foreground truncate">Streakly</h1>
+            <h1 className="text-xl font-bold text-foreground truncate">GlowHabit</h1>
             <p className="text-xs text-muted-foreground truncate">Build better habits</p>
           </div>
         </div>
@@ -140,7 +140,7 @@ export function Navigation({ activeTab, onTabChange }: NavigationProps) {
             <div className="flex items-center justify-center w-9 h-9 rounded-lg gradient-primary shadow-glow flex-shrink-0">
               <Flame className="w-4 h-4 text-primary-foreground" />
             </div>
-            <h1 className="text-lg font-bold text-foreground truncate">Streakly</h1>
+            <h1 className="text-lg font-bold text-foreground truncate">GlowHabit</h1>
           </div>
 
           {/* Hamburger Menu for accessing all tabs */}
