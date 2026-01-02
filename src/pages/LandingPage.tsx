@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Leaf, Sparkles, Heart, Target } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -176,9 +176,9 @@ const LandingPage = () => {
                 <div className="mt-6 text-center">
                   <p className="text-sm text-muted-foreground">
                     New here?{' '}
-                    <span className="text-calm-lavender hover:underline cursor-pointer">
+                    <Link to="/auth" className="text-calm-lavender hover:underline cursor-pointer">
                       Create an account
-                    </span>
+                    </Link>
                   </p>
                 </div>
               </CardContent>
