@@ -16,7 +16,7 @@ export interface UserProfile {
   };
 }
 
-const STORAGE_KEY = 'streakly-profile';
+const STORAGE_KEY = 'glowhabit-profile';
 
 const CALM_SUBTITLES = [
   "growing steadily",

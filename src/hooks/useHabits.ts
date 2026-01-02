@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Habit, HabitStats, DailyProgress, DEFAULT_HABITS } from '@/types/habit';
 import { format, subDays, parseISO, differenceInDays, isToday, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
 
-const STORAGE_KEY = 'streakly-habits';
+const STORAGE_KEY = 'glowhabit-habits';
 
 function generateId(): string {
   return Math.random().toString(36).substring(2, 15);

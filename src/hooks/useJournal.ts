@@ -3,8 +3,8 @@ import { JournalEntry, JournalStats, MoodAnalytics, SentimentData } from '@/type
 import { analyzeSentiment, getSentimentMood, calculateEmotionalStability, EmotionTag } from '@/utils/sentimentAnalysis';
 import { format, subDays, parseISO, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
 
-const STORAGE_KEY = 'streakly-journal';
-const SETTINGS_KEY = 'streakly-journal-settings';
+const STORAGE_KEY = 'glowhabit-journal';
+const SETTINGS_KEY = 'glowhabit-journal-settings';
 
 function generateId(): string {
   return Math.random().toString(36).substring(2, 15);

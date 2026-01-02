@@ -10,8 +10,8 @@ import {
   NIGHT_ROUTINE_TEMPLATES,
 } from '@/types/routine';
 
-const STORAGE_KEY = 'streakly-routines';
-const COMPLETIONS_KEY = 'streakly-routine-completions';
+const STORAGE_KEY = 'glowhabit-routines';
+const COMPLETIONS_KEY = 'glowhabit-routine-completions';
 
 const generateId = () => Math.random().toString(36).substring(2, 11);
 
