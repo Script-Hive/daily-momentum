@@ -2,13 +2,18 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { format, startOfMonth, endOfMonth, addMonths, subMonths, isSameMonth, isToday, isFuture, addDays } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { JournalEntry, MOOD_CONFIG } from '@/types/journal';
+import { JournalEntry, MOOD_CONFIG, SentimentData } from '@/types/journal';
+import { getSentimentEmoji } from '@/utils/sentimentAnalysis';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 interface JournalCalendarProps {
-  monthEntries: { date: string; hasEntry: boolean; wordCount: number; mood?: JournalEntry['mood'] }[];
+  monthEntries: { date: string; hasEntry: boolean; wordCount: number; mood?: JournalEntry['mood']; sentiment?: SentimentData }[];
   currentMonth: Date;
+  selectedDate: string | null;
+  onMonthChange: (month: Date) => void;
+  onDateSelect: (date: string) => void;
+}
   selectedDate: string | null;
   onMonthChange: (month: Date) => void;
   onDateSelect: (date: string) => void;
@@ -100,9 +105,9 @@ export function JournalCalendar({
               )}
             >
               <span className="font-medium">{format(date, 'd')}</span>
-              {entry.mood && (
+              {(entry.mood || entry.sentiment) && (
                 <span className="text-[10px] absolute -bottom-0.5">
-                  {MOOD_CONFIG[entry.mood].emoji}
+                  {entry.mood ? MOOD_CONFIG[entry.mood].emoji : entry.sentiment ? getSentimentEmoji(entry.sentiment.label) : ''}
                 </span>
               )}
             </motion.button>

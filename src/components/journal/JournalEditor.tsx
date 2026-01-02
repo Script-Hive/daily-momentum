@@ -1,18 +1,22 @@
-import { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { format } from 'date-fns';
-import { Maximize2, Minimize2, Sparkles, X, Check } from 'lucide-react';
-import { JournalEntry, MOOD_CONFIG, JOURNAL_PROMPTS } from '@/types/journal';
+import { Maximize2, Minimize2, Sparkles, X, Check, Brain, Info } from 'lucide-react';
+import { JournalEntry, MOOD_CONFIG, JOURNAL_PROMPTS, SentimentData } from '@/types/journal';
+import { analyzeSentiment, getSentimentEmoji, EMOTION_CONFIG, EmotionTag } from '@/utils/sentimentAnalysis';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
 interface JournalEditorProps {
   date: string;
   initialContent: string;
   initialMood?: JournalEntry['mood'];
+  initialSentiment?: SentimentData;
   habitsSummary?: JournalEntry['habitsSummary'];
-  onSave: (content: string, mood?: JournalEntry['mood']) => void;
+  sentimentEnabled?: boolean;
+  onSave: (content: string, mood?: JournalEntry['mood'], manualMood?: boolean) => void;
   onClose?: () => void;
 }
 
@@ -20,17 +24,22 @@ export function JournalEditor({
   date, 
   initialContent, 
   initialMood,
+  initialSentiment,
   habitsSummary,
+  sentimentEnabled = true,
   onSave,
   onClose 
 }: JournalEditorProps) {
   const [content, setContent] = useState(initialContent);
   const [mood, setMood] = useState<JournalEntry['mood'] | undefined>(initialMood);
+  const [manualMood, setManualMood] = useState(false);
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [showPrompt, setShowPrompt] = useState(!initialContent);
   const [currentPrompt, setCurrentPrompt] = useState('');
+  const [liveSentiment, setLiveSentiment] = useState(initialSentiment);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const saveTimeoutRef = useRef<NodeJS.Timeout>();
+  const sentimentTimeoutRef = useRef<NodeJS.Timeout>();
 
   // Get daily prompt based on date
   useEffect(() => {
@@ -38,6 +47,35 @@ export function JournalEditor({
     const promptIndex = dayOfYear % JOURNAL_PROMPTS.length;
     setCurrentPrompt(JOURNAL_PROMPTS[promptIndex]);
   }, [date]);
+
+  // Live sentiment analysis with debounce
+  useEffect(() => {
+    if (!sentimentEnabled || content.trim().length < 20) {
+      setLiveSentiment(undefined);
+      return;
+    }
+
+    if (sentimentTimeoutRef.current) {
+      clearTimeout(sentimentTimeoutRef.current);
+    }
+
+    sentimentTimeoutRef.current = setTimeout(() => {
+      const result = analyzeSentiment(content);
+      setLiveSentiment({
+        score: result.score,
+        label: result.label,
+        confidence: result.confidence,
+        emotions: result.emotions,
+        analyzedAt: new Date().toISOString(),
+      });
+    }, 500);
+
+    return () => {
+      if (sentimentTimeoutRef.current) {
+        clearTimeout(sentimentTimeoutRef.current);
+      }
+    };
+  }, [content, sentimentEnabled]);
 
   // Auto-save with debounce
   useEffect(() => {
@@ -47,7 +85,7 @@ export function JournalEditor({
     
     saveTimeoutRef.current = setTimeout(() => {
       if (content.trim() || mood) {
-        onSave(content, mood);
+        onSave(content, mood, manualMood);
       }
     }, 1000);
 
@@ -56,7 +94,12 @@ export function JournalEditor({
         clearTimeout(saveTimeoutRef.current);
       }
     };
-  }, [content, mood, onSave]);
+  }, [content, mood, manualMood, onSave]);
+
+  const handleMoodSelect = (m: JournalEntry['mood']) => {
+    setMood(m);
+    setManualMood(true);
+  };
 
   const handleUsePrompt = () => {
     const newContent = content ? `${content}\n\n${currentPrompt}\n` : `${currentPrompt}\n`;
@@ -66,6 +109,14 @@ export function JournalEditor({
   };
 
   const isToday = date === format(new Date(), 'yyyy-MM-dd');
+
+  const getSentimentBadgeColor = (label: string) => {
+    switch (label) {
+      case 'positive': return 'bg-success/15 text-success border-success/30';
+      case 'negative': return 'bg-warning/15 text-warning border-warning/30';
+      default: return 'bg-secondary text-muted-foreground border-border';
+    }
+  };
 
   return (
     <motion.div
@@ -121,7 +172,7 @@ export function JournalEditor({
             {(Object.keys(MOOD_CONFIG) as JournalEntry['mood'][]).map((m) => (
               <button
                 key={m}
-                onClick={() => setMood(m)}
+                onClick={() => handleMoodSelect(m)}
                 className={cn(
                   "text-xl p-2 rounded-lg transition-all hover:bg-secondary",
                   mood === m && "bg-primary/10 ring-2 ring-primary ring-offset-1 ring-offset-card"
@@ -132,7 +183,78 @@ export function JournalEditor({
               </button>
             ))}
           </div>
+          {manualMood && mood && (
+            <span className="text-xs text-muted-foreground ml-2">(manual)</span>
+          )}
         </div>
+
+        {/* Live Sentiment Indicator */}
+        <AnimatePresence>
+          {sentimentEnabled && liveSentiment && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="px-4 py-3 bg-secondary/10 border-b border-border/30"
+            >
+              <div className="flex items-center gap-3 flex-wrap">
+                <div className="flex items-center gap-2">
+                  <Brain className="w-4 h-4 text-primary" />
+                  <span className="text-xs text-muted-foreground">Auto-detected:</span>
+                </div>
+                
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className={cn(
+                        "flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border",
+                        getSentimentBadgeColor(liveSentiment.label)
+                      )}>
+                        <span>{getSentimentEmoji(liveSentiment.label)}</span>
+                        <span className="capitalize">{liveSentiment.label}</span>
+                        <span className="opacity-60">({liveSentiment.score > 0 ? '+' : ''}{liveSentiment.score})</span>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Sentiment score: {liveSentiment.score} ({liveSentiment.confidence} confidence)</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
+                {liveSentiment.emotions.length > 0 && (
+                  <div className="flex items-center gap-1.5">
+                    {liveSentiment.emotions.slice(0, 3).map(emotion => {
+                      const config = EMOTION_CONFIG[emotion];
+                      return (
+                        <TooltipProvider key={emotion}>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span className="text-base cursor-help">{config.emoji}</span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{config.label}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      );
+                    })}
+                  </div>
+                )}
+
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Info className="w-3.5 h-3.5 text-muted-foreground/50 cursor-help" />
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs">
+                      <p className="text-xs">Sentiment is analyzed privately in your browser. You can override by selecting a mood manually.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Habits Summary */}
         {habitsSummary && habitsSummary.completed > 0 && (

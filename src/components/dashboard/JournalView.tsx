@@ -1,13 +1,15 @@
 import { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format } from 'date-fns';
-import { PenTool, Plus, ArrowLeft, Trash2 } from 'lucide-react';
+import { PenTool, Plus, ArrowLeft, Trash2, Activity } from 'lucide-react';
 import { useJournal } from '@/hooks/useJournal';
 import { useHabits } from '@/hooks/useHabits';
 import { JournalEditor } from '@/components/journal/JournalEditor';
 import { JournalCalendar } from '@/components/journal/JournalCalendar';
 import { JournalInsights } from '@/components/journal/JournalInsights';
+import { MoodInsights } from '@/components/journal/MoodInsights';
 import { JournalEntry } from '@/types/journal';
+import { getSentimentEmoji } from '@/utils/sentimentAnalysis';
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
@@ -25,6 +27,7 @@ import { cn } from '@/lib/utils';
 export function JournalView() {
   const { 
     entries, 
+    settings,
     isLoaded, 
     getEntryByDate, 
     getTodayEntry, 
@@ -32,7 +35,9 @@ export function JournalView() {
     deleteEntry,
     getStats, 
     getMonthEntries,
-    getMoodTrend 
+    getMoodTrend,
+    getMoodAnalytics,
+    getHabitMoodCorrelation,
   } = useJournal();
   
   const { habits, getTodayProgress } = useHabits();
@@ -40,12 +45,15 @@ export function JournalView() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [showMoodInsights, setShowMoodInsights] = useState(false);
 
   const today = format(new Date(), 'yyyy-MM-dd');
   const todayEntry = getTodayEntry();
   const stats = getStats();
   const monthEntries = getMonthEntries(currentMonth);
   const moodTrend = getMoodTrend(30);
+  const moodAnalytics = getMoodAnalytics(30);
+  const habitCorrelation = getHabitMoodCorrelation();
   const todayProgress = getTodayProgress();
 
   // Get habits summary for today
@@ -63,9 +71,9 @@ export function JournalView() {
     setIsEditing(true);
   };
 
-  const handleSave = useCallback((content: string, mood?: JournalEntry['mood']) => {
+  const handleSave = useCallback((content: string, mood?: JournalEntry['mood'], manualMood?: boolean) => {
     const date = selectedDate || today;
-    saveEntry(date, content, mood, date === today ? habitsSummary : undefined);
+    saveEntry(date, content, mood, date === today ? habitsSummary : undefined, manualMood);
   }, [selectedDate, today, saveEntry, habitsSummary]);
 
   const handleStartToday = () => {
@@ -149,7 +157,9 @@ export function JournalView() {
               date={selectedDate || today}
               initialContent={currentEntry?.content || ''}
               initialMood={currentEntry?.mood}
+              initialSentiment={currentEntry?.sentiment}
               habitsSummary={selectedDate === today ? habitsSummary : currentEntry?.habitsSummary}
+              sentimentEnabled={settings.sentimentAnalysisEnabled}
               onSave={handleSave}
             />
           </motion.div>
@@ -176,6 +186,17 @@ export function JournalView() {
                 <PenTool className="w-4 h-4" />
                 {todayEntry ? "Continue Writing" : "Write Today's Entry"}
               </Button>
+              {moodAnalytics.moodByDay.length >= 3 && (
+                <Button
+                  variant="outline"
+                  onClick={() => setShowMoodInsights(!showMoodInsights)}
+                  className="gap-2"
+                >
+                  <Activity className="w-4 h-4" />
+                  {showMoodInsights ? 'Hide Insights' : 'Mood Insights'}
+                </Button>
+              )}
+              </Button>
             </div>
 
             {/* Today's Entry Preview */}
@@ -196,14 +217,30 @@ export function JournalView() {
                   {todayEntry.content || 'Start writing your thoughts...'}
                 </p>
                 {todayEntry.mood && (
-                  <div className="mt-3 pt-3 border-t border-border/50">
+                  <div className="mt-3 pt-3 border-t border-border/50 flex items-center gap-2">
                     <span className="text-sm text-muted-foreground">
                       Feeling: {todayEntry.mood}
                     </span>
+                    {todayEntry.sentiment && !todayEntry.manualMood && (
+                      <span className="text-xs text-muted-foreground/70">(auto-detected)</span>
+                    )}
                   </div>
                 )}
               </motion.div>
             )}
+
+            {/* Mood Insights Panel */}
+            <AnimatePresence>
+              {showMoodInsights && moodAnalytics.moodByDay.length >= 3 && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                >
+                  <MoodInsights analytics={moodAnalytics} habitCorrelation={habitCorrelation} />
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Main Grid */}
             <div className="grid lg:grid-cols-2 gap-6">
@@ -266,6 +303,9 @@ export function JournalView() {
                           </span>
                           {entry.mood && (
                             <span className="text-lg">{entry.mood === 'great' ? '😊' : entry.mood === 'good' ? '🙂' : entry.mood === 'okay' ? '😐' : entry.mood === 'low' ? '😔' : '😢'}</span>
+                          )}
+                          {!entry.mood && entry.sentiment && (
+                            <span className="text-lg">{getSentimentEmoji(entry.sentiment.label)}</span>
                           )}
                         </div>
                         <p 

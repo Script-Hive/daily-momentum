@@ -1,8 +1,20 @@
+import { EmotionTag, SentimentLabel } from '@/utils/sentimentAnalysis';
+
+export interface SentimentData {
+  score: number; // -100 to +100
+  label: SentimentLabel;
+  confidence: 'low' | 'medium' | 'high';
+  emotions: EmotionTag[];
+  analyzedAt: string;
+}
+
 export interface JournalEntry {
   id: string;
   date: string; // YYYY-MM-DD
   content: string;
   mood?: 'great' | 'good' | 'okay' | 'low' | 'rough';
+  manualMood?: boolean; // true if user manually set mood
+  sentiment?: SentimentData;
   habitsSummary?: {
     completed: number;
     total: number;
@@ -18,6 +30,14 @@ export interface JournalStats {
   totalEntries: number;
   thisMonthEntries: number;
   avgWordsPerEntry: number;
+}
+
+export interface MoodAnalytics {
+  averageScore: number;
+  positiveRatio: number;
+  emotionalStability: number;
+  dominantEmotions: { emotion: EmotionTag; count: number }[];
+  moodByDay: { date: string; score: number; label: SentimentLabel }[];
 }
 
 export const MOOD_CONFIG: Record<string, { label: string; emoji: string; color: string }> = {
