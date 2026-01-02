@@ -8,6 +8,7 @@ import { LifeBalanceView } from '@/components/dashboard/LifeBalanceView';
 import { GoalsView } from '@/components/dashboard/GoalsView';
 import { BudgetView } from '@/components/dashboard/BudgetView';
 import { ProjectsView } from '@/components/dashboard/ProjectsView';
+import { ProfileView } from '@/components/dashboard/ProfileView';
 import { SettingsView } from '@/components/dashboard/SettingsView';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -40,6 +41,8 @@ const Index = () => {
         return <BudgetView />;
       case 'projects':
         return <ProjectsView />;
+      case 'profile':
+        return <ProfileView onNavigateToGoals={() => setActiveTab('goals')} />;
       case 'settings':
         return <SettingsView />;
       default:
