@@ -56,13 +56,41 @@ function getStoredProfile(): UserProfile {
   return getDefaultProfile();
 }
 
+// Apply theme to document
+function applyTheme(theme: 'light' | 'dark' | 'calm') {
+  document.documentElement.classList.remove('dark', 'calm');
+  if (theme === 'dark') {
+    document.documentElement.classList.add('dark');
+  } else if (theme === 'calm') {
+    document.documentElement.classList.add('calm');
+  }
+  localStorage.setItem('theme', theme);
+}
+
+// Initialize theme on page load (before React hydrates)
+function initializeTheme() {
+  const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | 'calm' | null;
+  if (savedTheme) {
+    applyTheme(savedTheme);
+  }
+}
+
+// Run immediately
+if (typeof window !== 'undefined') {
+  initializeTheme();
+}
+
 export function useProfile() {
   const [profile, setProfile] = useState<UserProfile>(getDefaultProfile());
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    setProfile(getStoredProfile());
+    const storedProfile = getStoredProfile();
+    setProfile(storedProfile);
     setIsLoaded(true);
+    
+    // Apply theme from profile on load
+    applyTheme(storedProfile.preferences.appearance);
   }, []);
 
   useEffect(() => {
@@ -93,6 +121,7 @@ export function useProfile() {
     updateProfile,
     updatePreferences,
     changeSubtitle,
+    applyTheme,
     CALM_SUBTITLES,
   };
 }
