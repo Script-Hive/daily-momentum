@@ -164,30 +164,6 @@ export function JournalEditor({
             )}
           </div>
         </div>
-
-        {/* Mood Selector */}
-        <div className="flex items-center gap-2 p-4 border-b border-border/30 bg-secondary/20">
-          <span className="text-sm text-muted-foreground mr-2">How are you feeling?</span>
-          <div className="flex gap-1">
-            {(Object.keys(MOOD_CONFIG) as JournalEntry['mood'][]).map((m) => (
-              <button
-                key={m}
-                onClick={() => handleMoodSelect(m)}
-                className={cn(
-                  "text-xl p-2 rounded-lg transition-all hover:bg-secondary",
-                  mood === m && "bg-primary/10 ring-2 ring-primary ring-offset-1 ring-offset-card"
-                )}
-                title={MOOD_CONFIG[m!].label}
-              >
-                {MOOD_CONFIG[m!].emoji}
-              </button>
-            ))}
-          </div>
-          {manualMood && mood && (
-            <span className="text-xs text-muted-foreground ml-2">(manual)</span>
-          )}
-        </div>
-
         {/* Live Sentiment Indicator */}
         <AnimatePresence>
           {sentimentEnabled && liveSentiment && (
