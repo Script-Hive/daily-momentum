@@ -15,11 +15,16 @@ import { AnimatePresence, motion } from 'framer-motion';
 const Index = () => {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard');
 
-  // Initialize theme
+  // Initialize theme - default to dark mode
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
+    if (savedTheme === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
       document.documentElement.classList.add('dark');
+      if (!savedTheme) {
+        localStorage.setItem('theme', 'dark');
+      }
     }
   }, []);
 
