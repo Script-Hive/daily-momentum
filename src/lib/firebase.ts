@@ -1,5 +1,13 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, ConfirmationResult, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { 
+  getAuth, 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  sendPasswordResetEmail,
+  updateProfile,
+  onAuthStateChanged,
+  User
+} from 'firebase/auth';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -19,57 +27,36 @@ export const auth = getAuth(app);
 // Set language to user's browser preference
 auth.languageCode = navigator.language;
 
-// Store confirmation result globally for OTP verification
-let confirmationResult: ConfirmationResult | null = null;
-
-export const setupRecaptcha = (containerId: string): RecaptchaVerifier => {
-  const recaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
-    size: 'invisible',
-    callback: () => {
-      // reCAPTCHA solved, allow signInWithPhoneNumber
-    },
-    'expired-callback': () => {
-      // Response expired, ask user to solve reCAPTCHA again
-    }
-  });
-  return recaptchaVerifier;
-};
-
-export const sendOTP = async (
-  phoneNumber: string, 
-  recaptchaVerifier: RecaptchaVerifier
-): Promise<{ success: boolean; error?: string }> => {
+// Register with email and password
+export const registerWithEmail = async (
+  email: string, 
+  password: string,
+  fullName: string
+): Promise<{ success: boolean; error?: string; user?: User }> => {
   try {
-    confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
-    return { success: true };
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    
+    // Update the user's display name
+    await updateProfile(userCredential.user, {
+      displayName: fullName
+    });
+    
+    return { success: true, user: userCredential.user };
   } catch (error: any) {
-    let errorMessage = 'Failed to send OTP. Please try again.';
-
-    // Some errors are returned from the underlying Identity Toolkit API as plain strings.
-    const rawMessage = String(error?.message || '');
-    if (rawMessage.includes('BILLING_NOT_ENABLED')) {
-      errorMessage = 'Phone OTP requires billing to be enabled for this Firebase project (Blaze plan), or use test phone numbers in Firebase Auth.';
-      return { success: false, error: errorMessage };
-    }
+    let errorMessage = 'Failed to create account. Please try again.';
     
     switch (error.code) {
-      case 'auth/invalid-phone-number':
-        errorMessage = 'Invalid phone number format. Please include country code.';
+      case 'auth/email-already-in-use':
+        errorMessage = 'An account with this email already exists.';
         break;
-      case 'auth/too-many-requests':
-        errorMessage = 'Too many requests. Please try again later.';
+      case 'auth/invalid-email':
+        errorMessage = 'Invalid email address format.';
         break;
-      case 'auth/captcha-check-failed':
-        errorMessage = 'reCAPTCHA verification failed. Please refresh and try again.';
-        break;
-      case 'auth/quota-exceeded':
-        errorMessage = 'SMS quota exceeded. Please try again later.';
+      case 'auth/weak-password':
+        errorMessage = 'Password is too weak. Please use at least 6 characters.';
         break;
       case 'auth/operation-not-allowed':
-        errorMessage = 'Phone sign-in is not enabled for this project. Enable Phone provider in Firebase Auth.';
-        break;
-      case 'auth/unauthorized-domain':
-        errorMessage = 'This domain is not authorized for Firebase Auth. Add it under Firebase Auth → Settings → Authorized domains.';
+        errorMessage = 'Email/password accounts are not enabled. Please contact support.';
         break;
     }
     
@@ -77,25 +64,35 @@ export const sendOTP = async (
   }
 };
 
-export const verifyOTP = async (
-  otp: string
-): Promise<{ success: boolean; error?: string; user?: any }> => {
-  if (!confirmationResult) {
-    return { success: false, error: 'No OTP request found. Please request a new OTP.' };
-  }
-
+// Sign in with email and password
+export const loginWithEmail = async (
+  email: string, 
+  password: string
+): Promise<{ success: boolean; error?: string; user?: User }> => {
   try {
-    const result = await confirmationResult.confirm(otp);
-    return { success: true, user: result.user };
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    return { success: true, user: userCredential.user };
   } catch (error: any) {
-    let errorMessage = 'Failed to verify OTP. Please try again.';
+    let errorMessage = 'Failed to sign in. Please try again.';
     
     switch (error.code) {
-      case 'auth/invalid-verification-code':
-        errorMessage = 'Invalid OTP. Please check and try again.';
+      case 'auth/invalid-email':
+        errorMessage = 'Invalid email address format.';
         break;
-      case 'auth/code-expired':
-        errorMessage = 'OTP has expired. Please request a new one.';
+      case 'auth/user-disabled':
+        errorMessage = 'This account has been disabled.';
+        break;
+      case 'auth/user-not-found':
+        errorMessage = 'No account found with this email.';
+        break;
+      case 'auth/wrong-password':
+        errorMessage = 'Incorrect password. Please try again.';
+        break;
+      case 'auth/invalid-credential':
+        errorMessage = 'Invalid email or password. Please check your credentials.';
+        break;
+      case 'auth/too-many-requests':
+        errorMessage = 'Too many failed attempts. Please try again later.';
         break;
     }
     
@@ -103,39 +100,35 @@ export const verifyOTP = async (
   }
 };
 
+// Send password reset email
+export const resetPassword = async (
+  email: string
+): Promise<{ success: boolean; error?: string }> => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+    return { success: true };
+  } catch (error: any) {
+    let errorMessage = 'Failed to send reset email. Please try again.';
+    
+    switch (error.code) {
+      case 'auth/invalid-email':
+        errorMessage = 'Invalid email address format.';
+        break;
+      case 'auth/user-not-found':
+        errorMessage = 'No account found with this email.';
+        break;
+    }
+    
+    return { success: false, error: errorMessage };
+  }
+};
+
+// Sign out
 export const signOut = async (): Promise<void> => {
   await auth.signOut();
-  confirmationResult = null;
 };
 
-// Google Sign-In
-const googleProvider = new GoogleAuthProvider();
-googleProvider.setCustomParameters({
-  prompt: 'select_account'
-});
-
-export const signInWithGoogle = async (): Promise<{ success: boolean; error?: string; user?: any }> => {
-  try {
-    const result = await signInWithPopup(auth, googleProvider);
-    return { success: true, user: result.user };
-  } catch (error: any) {
-    let errorMessage = 'Failed to sign in with Google. Please try again.';
-    
-    switch (error.code) {
-      case 'auth/popup-closed-by-user':
-        errorMessage = 'Sign-in popup was closed. Please try again.';
-        break;
-      case 'auth/popup-blocked':
-        errorMessage = 'Popup was blocked. Please allow popups and try again.';
-        break;
-      case 'auth/cancelled-popup-request':
-        errorMessage = 'Sign-in was cancelled. Please try again.';
-        break;
-      case 'auth/account-exists-with-different-credential':
-        errorMessage = 'An account already exists with this email using a different sign-in method.';
-        break;
-    }
-    
-    return { success: false, error: errorMessage };
-  }
+// Subscribe to auth state changes
+export const onAuthChange = (callback: (user: User | null) => void) => {
+  return onAuthStateChanged(auth, callback);
 };
