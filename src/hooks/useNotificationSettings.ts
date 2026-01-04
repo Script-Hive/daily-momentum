@@ -29,6 +29,16 @@ export function useNotificationSettings() {
     }
   }, []);
 
+  // Function to manually recheck permission status
+  const recheckPermission = useCallback(() => {
+    if ('Notification' in window) {
+      const currentPermission = Notification.permission;
+      setPermissionStatus(currentPermission);
+      return currentPermission;
+    }
+    return 'default' as NotificationPermission;
+  }, []);
+
   // Persist settings to localStorage
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
@@ -113,6 +123,7 @@ export function useNotificationSettings() {
     settings,
     permissionStatus,
     requestPermission,
+    recheckPermission,
     updateSettings,
     toggleCategory,
     toggleGlobal,

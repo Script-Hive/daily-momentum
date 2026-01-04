@@ -63,6 +63,7 @@ export function NotificationSettingsPanel() {
     settings,
     permissionStatus,
     requestPermission,
+    recheckPermission,
     updateSettings,
     toggleCategory,
     toggleGlobal,
@@ -98,6 +99,23 @@ export function NotificationSettingsPanel() {
       });
     } finally {
       setIsInitializing(false);
+    }
+  };
+
+  const handleCheckAgain = () => {
+    const newStatus = recheckPermission();
+    if (newStatus === 'granted') {
+      toggleGlobal(true);
+      toast({
+        title: 'Notifications enabled!',
+        description: 'Your browser permissions have been updated.',
+      });
+    } else if (newStatus === 'denied') {
+      toast({
+        title: 'Still blocked',
+        description: 'Please check your browser settings and try again.',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -155,7 +173,28 @@ export function NotificationSettingsPanel() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          {permissionStatus !== 'granted' ? (
+          {permissionStatus === 'denied' ? (
+            <div className="space-y-4">
+              <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/20">
+                <p className="font-medium text-foreground mb-2">Notifications are blocked</p>
+                <p className="text-sm text-muted-foreground mb-3">
+                  To enable notifications, please update your browser settings:
+                </p>
+                <ol className="text-sm text-muted-foreground space-y-1 list-decimal list-inside mb-4">
+                  <li>Click the lock/info icon in your browser's address bar</li>
+                  <li>Find "Notifications" and change to "Allow"</li>
+                  <li>Click "Check Again" below</li>
+                </ol>
+                <Button
+                  onClick={handleCheckAgain}
+                  variant="outline"
+                  className="w-full sm:w-auto"
+                >
+                  Check Again
+                </Button>
+              </div>
+            </div>
+          ) : permissionStatus !== 'granted' ? (
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl bg-secondary/50">
               <div>
                 <p className="font-medium text-foreground">Enable push notifications</p>
@@ -163,7 +202,7 @@ export function NotificationSettingsPanel() {
               </div>
               <Button
                 onClick={handleEnableNotifications}
-                disabled={isInitializing || permissionStatus === 'denied'}
+                disabled={isInitializing}
                 className="bg-gradient-to-r from-calm-lavender to-calm-sage text-white"
               >
                 {isInitializing ? 'Enabling...' : 'Enable Notifications'}
