@@ -4,6 +4,7 @@ import { LayoutDashboard, Sparkles, BarChart3, Target, Settings, Flame, BookOpen
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { UserMenu } from './UserMenu';
 
 export type Tab = 'dashboard' | 'routines' | 'journal' | 'analytics' | 'lifebalance' | 'goals' | 'budget' | 'projects' | 'profile' | 'settings';
 
@@ -72,11 +73,9 @@ export function Navigation({ activeTab, onTabChange }: NavigationProps) {
           ))}
         </div>
 
-        {/* Footer */}
+        {/* User Menu */}
         <div className="pt-4 border-t border-border">
-          <p className="text-xs text-muted-foreground text-center">
-            Track your progress daily
-          </p>
+          <UserMenu />
         </div>
       </nav>
 
@@ -183,11 +182,9 @@ export function Navigation({ activeTab, onTabChange }: NavigationProps) {
                   ))}
                 </div>
 
-                {/* Footer */}
+                {/* User Menu */}
                 <div className="px-4 py-4 border-t border-border">
-                  <p className="text-xs text-muted-foreground text-center">
-                    Track your progress daily
-                  </p>
+                  <UserMenu />
                 </div>
               </div>
             </SheetContent>
