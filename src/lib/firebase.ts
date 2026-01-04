@@ -1,15 +1,15 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, ConfirmationResult, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
-// Firebase configuration - Replace these with your Firebase project credentials
-// These are client-side keys and are safe to expose (security is handled by Firebase)
+// Firebase configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyAerboLllCRptvcn2hT1grWmK8Q0Uv58BQ",
+  authDomain: "habbit-otp.firebaseapp.com",
+  projectId: "habbit-otp",
+  storageBucket: "habbit-otp.firebasestorage.app",
+  messagingSenderId: "7122951500",
+  appId: "1:7122951500:web:c651d6e27fbcb8d03583e9",
+  measurementId: "G-GFX1FLLHV5"
 };
 
 // Initialize Firebase
