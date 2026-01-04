@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.85f70f1fb5d941f38547b5c33ad55b49',
+  appId: 'app.lovable.glowhabit',
   appName: 'GlowHabit',
   webDir: 'dist',
   server: {
