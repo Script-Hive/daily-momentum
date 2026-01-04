@@ -44,6 +44,13 @@ export const sendOTP = async (
     return { success: true };
   } catch (error: any) {
     let errorMessage = 'Failed to send OTP. Please try again.';
+
+    // Some errors are returned from the underlying Identity Toolkit API as plain strings.
+    const rawMessage = String(error?.message || '');
+    if (rawMessage.includes('BILLING_NOT_ENABLED')) {
+      errorMessage = 'Phone OTP requires billing to be enabled for this Firebase project (Blaze plan), or use test phone numbers in Firebase Auth.';
+      return { success: false, error: errorMessage };
+    }
     
     switch (error.code) {
       case 'auth/invalid-phone-number':
@@ -57,6 +64,12 @@ export const sendOTP = async (
         break;
       case 'auth/quota-exceeded':
         errorMessage = 'SMS quota exceeded. Please try again later.';
+        break;
+      case 'auth/operation-not-allowed':
+        errorMessage = 'Phone sign-in is not enabled for this project. Enable Phone provider in Firebase Auth.';
+        break;
+      case 'auth/unauthorized-domain':
+        errorMessage = 'This domain is not authorized for Firebase Auth. Add it under Firebase Auth → Settings → Authorized domains.';
         break;
     }
     
