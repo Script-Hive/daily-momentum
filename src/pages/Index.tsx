@@ -47,7 +47,12 @@ const Index = () => {
       case 'projects':
         return <ProjectsView />;
       case 'profile':
-        return <ProfileView onNavigateToGoals={() => setActiveTab('goals')} />;
+        return (
+          <ProfileView 
+            onNavigateToGoals={() => setActiveTab('goals')} 
+            onOpenNotificationSettings={() => setActiveTab('settings')}
+          />
+        );
       case 'settings':
         return <SettingsView />;
       default:
