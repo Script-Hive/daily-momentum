@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Leaf, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/hooks/use-toast';
 import { loginWithEmail, resetPassword } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
-import { useEffect } from 'react';
+import { LogoIcon } from '@/components/brand/Logo';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -133,12 +133,12 @@ const LoginPage = () => {
         <Card className="bg-card/80 backdrop-blur-md border-border/50 shadow-xl">
           <CardHeader className="text-center space-y-2">
             <motion.div 
-              className="mx-auto w-14 h-14 rounded-2xl bg-gradient-to-br from-calm-lavender to-calm-sage flex items-center justify-center mb-2"
+              className="mx-auto mb-2"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
             >
-              <Leaf className="w-7 h-7 text-white" />
+              <LogoIcon size={56} />
             </motion.div>
             <CardTitle className="text-2xl font-semibold">Login to Continue</CardTitle>
             <CardDescription>Welcome back! Sign in to continue your journey.</CardDescription>

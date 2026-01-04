@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Sparkles, Check, Sunrise, Moon, Target, Brain } from 'lucide-react';
+import { ArrowRight, Check, Sunrise, Moon, Target, Brain, Sparkles } from 'lucide-react';
+import { LogoIcon } from '@/components/brand/Logo';
 
 const HERO_FEATURES = [
   'Habits & Routines',

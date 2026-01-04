@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, Sparkles, BarChart3, Target, Settings, Flame, BookOpen, Sunrise, Scale, Wallet, Rocket, User, Menu, X } from 'lucide-react';
+import { LayoutDashboard, BarChart3, Target, Settings, BookOpen, Sunrise, Scale, Wallet, Rocket, User, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { UserMenu } from './UserMenu';
+import { LogoIcon } from '@/components/brand/Logo';
 
 export type Tab = 'dashboard' | 'routines' | 'journal' | 'analytics' | 'lifebalance' | 'goals' | 'budget' | 'projects' | 'profile' | 'settings';
 
@@ -43,11 +44,9 @@ export function Navigation({ activeTab, onTabChange }: NavigationProps) {
       <nav className="hidden lg:flex fixed left-0 top-0 h-screen w-64 flex-col bg-card border-r border-border p-4 z-50">
         {/* Logo */}
         <div className="flex items-center gap-3 px-3 py-4 mb-6">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl gradient-primary shadow-glow flex-shrink-0">
-            <Flame className="w-5 h-5 text-primary-foreground" />
-          </div>
+          <LogoIcon size={40} className="flex-shrink-0" />
           <div className="min-w-0">
-            <h1 className="text-xl font-bold text-foreground truncate">GlowHabit</h1>
+            <h1 className="text-xl font-bold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent truncate">GlowHabit</h1>
             <p className="text-xs text-muted-foreground truncate">Build better habits</p>
           </div>
         </div>
@@ -82,9 +81,7 @@ export function Navigation({ activeTab, onTabChange }: NavigationProps) {
       {/* Tablet Navigation - Compact sidebar */}
       <nav className="hidden md:flex lg:hidden fixed left-0 top-0 h-screen w-16 flex-col items-center bg-card border-r border-border py-4 z-50">
         {/* Logo */}
-        <div className="flex items-center justify-center w-10 h-10 rounded-xl gradient-primary shadow-glow mb-6">
-          <Flame className="w-5 h-5 text-primary-foreground" />
-        </div>
+        <LogoIcon size={36} className="mb-6" />
 
         {/* Nav Items */}
         <div className="flex-1 space-y-2 overflow-y-auto w-full px-2">
@@ -135,11 +132,9 @@ export function Navigation({ activeTab, onTabChange }: NavigationProps) {
       {/* Mobile Header with Hamburger Menu */}
       <header className="md:hidden fixed top-0 left-0 right-0 bg-card/95 backdrop-blur-lg border-b border-border z-40 px-4 py-3 pt-safe">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="flex items-center justify-center w-9 h-9 rounded-lg gradient-primary shadow-glow flex-shrink-0">
-              <Flame className="w-4 h-4 text-primary-foreground" />
-            </div>
-            <h1 className="text-lg font-bold text-foreground truncate">GlowHabit</h1>
+          <div className="flex items-center gap-2.5 min-w-0">
+            <LogoIcon size={32} className="flex-shrink-0" />
+            <h1 className="text-lg font-bold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent truncate">GlowHabit</h1>
           </div>
 
           {/* Hamburger Menu for accessing all tabs */}
@@ -153,9 +148,7 @@ export function Navigation({ activeTab, onTabChange }: NavigationProps) {
               <div className="flex flex-col h-full">
                 {/* Sheet Header */}
                 <div className="flex items-center gap-3 px-4 py-4 border-b border-border">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-xl gradient-primary shadow-glow">
-                    <Flame className="w-5 h-5 text-primary-foreground" />
-                  </div>
+                  <LogoIcon size={40} />
                   <div>
                     <h2 className="text-lg font-bold text-foreground">Menu</h2>
                     <p className="text-xs text-muted-foreground">Navigate your journey</p>
