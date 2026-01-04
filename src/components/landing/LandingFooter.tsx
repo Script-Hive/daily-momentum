@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Sparkles, Github, Twitter, Mail } from 'lucide-react';
+import { Github, Twitter, Mail } from 'lucide-react';
+import { LogoIcon } from '@/components/brand/Logo';
 
 const FOOTER_LINKS = {
   product: [
@@ -26,10 +27,8 @@ export function LandingFooter() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-white" />
-              </div>
+            <Link to="/" className="flex items-center gap-2.5 mb-4">
+              <LogoIcon size={36} />
               <span className="text-xl font-bold">GlowHabit</span>
             </Link>
             <p className="text-sm text-muted-foreground mb-4">

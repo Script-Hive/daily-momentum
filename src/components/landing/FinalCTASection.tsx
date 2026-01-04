@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles, Globe, Download } from 'lucide-react';
+import { LogoIcon } from '@/components/brand/Logo';
 
 export function FinalCTASection() {
   return (
