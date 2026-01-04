@@ -4,10 +4,22 @@ const config: CapacitorConfig = {
   appId: 'app.lovable.glowhabit',
   appName: 'GlowHabit',
   webDir: 'dist',
-  server: {
-    url: 'https://85f70f1f-b5d9-41f3-8547-b5c33ad55b49.lovableproject.com?forceHideBadge=true',
-    cleartext: true
-  }
+  plugins: {
+    SplashScreen: {
+      launchShowDuration: 2000,
+      launchAutoHide: true,
+      launchFadeOutDuration: 500,
+      backgroundColor: '#FFF7ED',
+      showSpinner: false,
+      androidScaleType: 'CENTER_CROP',
+      splashFullScreen: true,
+      splashImmersive: true,
+    },
+    LocalNotifications: {
+      smallIcon: 'ic_stat_icon',
+      iconColor: '#F97316',
+    },
+  },
 };
 
 export default config;
