@@ -104,7 +104,7 @@ export function LandingFooter() {
             © {new Date().getFullYear()} GlowHabit. All rights reserved.
           </p>
           <p className="text-sm text-muted-foreground">
-            Made with 💚 for personal growth
+            A system for mindful living.
           </p>
         </div>
       </div>
