@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Moon, Sun, Trash2, RefreshCw, Info, ExternalLink, LogOut } from 'lucide-react';
+import { Moon, Sun, Trash2, RefreshCw, Info, ExternalLink, LogOut, Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import {
@@ -16,20 +16,27 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
+import { NotificationSettingsPanel } from '@/components/notifications/NotificationSettingsPanel';
+import { useAuth } from '@/contexts/AuthContext';
 
 export function SettingsView() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const navigate = useNavigate();
+  const { signOut } = useAuth();
 
   useEffect(() => {
     const isDark = document.documentElement.classList.contains('dark');
     setIsDarkMode(isDark);
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('glowhabit-auth');
-    toast.success('Successfully logged out');
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      toast.success('Successfully logged out');
+      navigate('/login');
+    } catch (error) {
+      toast.error('Failed to sign out');
+    }
   };
 
   const toggleDarkMode = () => {
@@ -95,6 +102,15 @@ export function SettingsView() {
             onCheckedChange={toggleDarkMode}
           />
         </div>
+      </motion.section>
+
+      {/* Notifications */}
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.05 }}
+      >
+        <NotificationSettingsPanel />
       </motion.section>
 
       {/* Data Management */}
