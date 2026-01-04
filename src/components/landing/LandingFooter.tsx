@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Github, Twitter, Mail } from 'lucide-react';
 import { LogoIcon } from '@/components/brand/Logo';
@@ -15,8 +14,8 @@ const FOOTER_LINKS = {
     { label: 'Roadmap', href: '#' },
   ],
   legal: [
-    { label: 'Privacy Policy', href: '#' },
-    { label: 'Terms of Service', href: '#' },
+    { label: 'Privacy Policy', href: '/privacy' },
+    { label: 'Terms of Service', href: '/terms' },
   ],
 };
 
@@ -87,12 +86,12 @@ export function LandingFooter() {
             <ul className="space-y-3">
               {FOOTER_LINKS.legal.map((link) => (
                 <li key={link.label}>
-                  <a 
-                    href={link.href}
+                  <Link 
+                    to={link.href}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
