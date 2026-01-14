@@ -9,6 +9,7 @@ import { AddHabitDialog } from '@/components/habits/AddHabitDialog';
 import { ProgressRing } from '@/components/habits/ProgressRing';
 import { IntentionCard } from '@/components/dashboard/IntentionCard';
 import { GlowMomentCard } from '@/components/dashboard/GlowMomentCard';
+import { AISuggestionCard } from '@/components/dashboard/AISuggestionCard';
 import { CATEGORY_CONFIG, HabitCategory } from '@/types/habit';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -114,6 +115,9 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
 
       {/* Intention Card - Prominent Position */}
       <IntentionCard />
+
+      {/* AI Suggestion Card */}
+      <AISuggestionCard />
 
       {/* Glow Moments & Stats Row */}
       <div className="grid gap-4 lg:grid-cols-3">
