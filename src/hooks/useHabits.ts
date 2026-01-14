@@ -67,6 +67,18 @@ export function useHabits() {
     setHabits(prev => prev.filter(h => h.id !== habitId));
   }, []);
 
+  const updateHabit = useCallback((habitId: string, updates: Partial<Omit<Habit, 'id' | 'completedDates' | 'createdAt' | 'order'>>) => {
+    setHabits(prev => prev.map(habit => {
+      if (habit.id !== habitId) return habit;
+      return {
+        ...habit,
+        ...updates,
+        // Update lifeArea to match category if category is changed
+        lifeArea: updates.category && updates.category !== 'custom' ? updates.category : habit.lifeArea,
+      };
+    }));
+  }, []);
+
   const reorderHabits = useCallback((startIndex: number, endIndex: number) => {
     setHabits(prev => {
       const result = Array.from(prev);
@@ -183,6 +195,7 @@ export function useHabits() {
     toggleHabit,
     addHabit,
     removeHabit,
+    updateHabit,
     reorderHabits,
     getHabitStats,
     getDailyProgress,

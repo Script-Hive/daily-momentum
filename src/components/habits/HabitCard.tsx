@@ -1,31 +1,35 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Check, Flame, MoreVertical, Trash2 } from 'lucide-react';
-import { Habit, HabitStats, CATEGORY_CONFIG } from '@/types/habit';
+import { Check, Flame, MoreVertical, Trash2, Pencil } from 'lucide-react';
+import { Habit, HabitStats, HabitCategory, CATEGORY_CONFIG } from '@/types/habit';
 import { HabitIcon } from '@/components/ui/HabitIcon';
-import { format, subDays, addDays, startOfMonth, endOfMonth, isSameMonth, isToday, isFuture } from 'date-fns';
+import { format, addDays, startOfMonth, endOfMonth, isSameMonth, isToday, isFuture } from 'date-fns';
 import { cn } from '@/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { EditHabitDialog } from './EditHabitDialog';
 
 interface HabitCardProps {
   habit: Habit;
   stats: HabitStats;
   onToggle: (habitId: string, date: string) => void;
   onRemove: (habitId: string) => void;
+  onUpdate: (habitId: string, updates: { name: string; category: HabitCategory }) => void;
   currentMonth: Date;
 }
 
-export function HabitCard({ habit, stats, onToggle, onRemove, currentMonth }: HabitCardProps) {
+export function HabitCard({ habit, stats, onToggle, onRemove, onUpdate, currentMonth }: HabitCardProps) {
+  const [editOpen, setEditOpen] = useState(false);
   const categoryConfig = CATEGORY_CONFIG[habit.category] || CATEGORY_CONFIG.custom;
   
   // Get days for the current month
   const monthStart = startOfMonth(currentMonth);
-  const monthEnd = endOfMonth(currentMonth);
   const today = new Date();
   
   // Generate 31 days grid for the current month
@@ -86,6 +90,11 @@ export function HabitCard({ habit, stats, onToggle, onRemove, currentMonth }: Ha
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setEditOpen(true)}>
+              <Pencil className="w-4 h-4 mr-2" />
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuItem 
               onClick={() => onRemove(habit.id)}
               className="text-destructive focus:text-destructive"
@@ -96,6 +105,14 @@ export function HabitCard({ habit, stats, onToggle, onRemove, currentMonth }: Ha
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      {/* Edit Dialog */}
+      <EditHabitDialog
+        habit={habit}
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        onSave={onUpdate}
+      />
 
       {/* 31-day Calendar Grid */}
       <div className="grid grid-cols-7 gap-0.5 sm:gap-1 mb-2 sm:mb-3">

@@ -27,6 +27,7 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
     toggleHabit, 
     addHabit, 
     removeHabit, 
+    updateHabit,
     getHabitStats, 
     getTodayProgress,
     getBestHabit,
@@ -306,6 +307,7 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
                 stats={getHabitStats(habit)}
                 onToggle={toggleHabit}
                 onRemove={removeHabit}
+                onUpdate={updateHabit}
                 currentMonth={currentMonth}
               />
             ))}
