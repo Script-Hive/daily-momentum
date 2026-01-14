@@ -7,6 +7,8 @@ import { useJournal } from '@/hooks/useJournal';
 import { HabitCard } from '@/components/habits/HabitCard';
 import { AddHabitDialog } from '@/components/habits/AddHabitDialog';
 import { ProgressRing } from '@/components/habits/ProgressRing';
+import { IntentionCard } from '@/components/dashboard/IntentionCard';
+import { GlowMomentCard } from '@/components/dashboard/GlowMomentCard';
 import { CATEGORY_CONFIG, HabitCategory } from '@/types/habit';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -110,8 +112,17 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+      {/* Intention Card - Prominent Position */}
+      <IntentionCard />
+
+      {/* Glow Moments & Stats Row */}
+      <div className="grid gap-4 lg:grid-cols-3">
+        <div className="lg:col-span-1">
+          <GlowMomentCard />
+        </div>
+        
+        {/* Stats Cards - Now in a 2x2 grid */}
+        <div className="lg:col-span-2 grid grid-cols-2 gap-3 sm:gap-4">
         {/* Today's Progress */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -198,6 +209,7 @@ export function DashboardView({ onNavigateToJournal }: DashboardViewProps) {
             <p className="text-xs sm:text-sm text-muted-foreground">Add habits to track</p>
           )}
         </motion.div>
+        </div>
       </div>
 
       {/* Category Filter & Month Selector */}
